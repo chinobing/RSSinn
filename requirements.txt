@@ -1,0 +1,11 @@
+aiohttp==3.8.1
+Faker==13.3.3
+fastapi-rss==0.1.4
+fastapi==0.73.0
+Jinja2==3.1.1
+parsel==1.6.0
+requests-html==0.10.0
+asyncache==0.1.1
+cachetools==5.0.0
+uvicorn==0.17.6
+gunicorn
