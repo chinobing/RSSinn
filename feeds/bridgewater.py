@@ -12,6 +12,7 @@ description="""
 
 - 来源：`https://www.bridgewater.com/research-and-insights/`
 - 参数：没有
+- 状态： ![Uptime](https://img.shields.io/endpoint?url=https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/api/bridgewater/uptime.json)
 """
 
 @bridgewater.get("/research/",

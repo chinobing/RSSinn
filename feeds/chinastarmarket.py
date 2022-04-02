@@ -15,6 +15,7 @@ description="""
 
 - 来源：`https://www.chinastarmarket.cn/telegraph`
 - 参数：没有
+- 状态： ![Uptime](https://img.shields.io/endpoint?url=https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/api/chinastarmarket/uptime.json)
 """
 
 @chinastarmarket.get("/telegraph/",

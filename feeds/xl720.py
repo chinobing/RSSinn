@@ -15,6 +15,7 @@ description="""
 - 参数： **id**
 - 路由： `/xl720/?id={}`
 - Tips： 如：https://www.xl720.com/thunder/44575.html， `对应id为44575`
+- 状态： ![Uptime](https://img.shields.io/endpoint?url=https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/api/xl720/uptime.json)
 """
 
 

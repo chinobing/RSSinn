@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from models.utils import fetch
+from settings import upptime_url
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
@@ -15,6 +16,7 @@ description="""
 
 - 来源：`https://36kr.com/newsflashes/`
 - 参数：没有
+- 状态： ![Uptime](https://img.shields.io/endpoint?url=https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/api/36kr/uptime.json)
 """
 
 

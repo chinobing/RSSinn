@@ -12,6 +12,7 @@ description="""
 - 参数：**cat**， **include_keywords**， **exclude_keywords**
 - 路由： `/esnai/?cat={}&include_keywords={}}&exclude_keywords={}`
 - Tips：对于cpa业务探讨(`?cat=7`)，可以选择包含关键字【`chenyiwei-aegis-fanxu7788-nikankan-henry204618-复制忍者卡卡西`】
+- 状态： ![Uptime](https://img.shields.io/endpoint?url=https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/api/esnai/uptime.json)
 """
 
 @esnai.get("/", summary='会计视野论坛', description=description)
