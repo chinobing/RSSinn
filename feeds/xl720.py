@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from typing import Optional
 from models.utils import fetch
+from models.upptime import add_upptime_status
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
@@ -8,14 +9,14 @@ from datetime import datetime
 
 xl720 = APIRouter()
 
-description="""
+description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
 
 - 来源：`https://www.xl720.com/`
 - 参数： **id**
-- 路由： `/xl720/?id={}`
-- Tips： 如：https://www.xl720.com/thunder/44575.html， `对应id为44575`
-- 状态： ![Uptime](https://img.shields.io/endpoint?url=https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/api/xl720/uptime.json)
+- 路由： `/xl720/?id=[]`
+- Tips： 如：https://www.xl720.com/thunder/46198.html， `对应id为46198`
+- 状态： {add_upptime_status('xl720')}
 """
 
 
@@ -32,12 +33,13 @@ async def xl_movies(id:Optional[int] = None):
 
         page_title = post.xpath("//h1[@class='postli-1']//text()").get()
         description = post.xpath("//div[@id='link-report']//text()").get()
+        img =post.xpath("//div[@id='mainpic']/img/@src").get()
         episodes = post.xpath("//div[@id='zdownload']/div[@class='download-link']")
         items_list = []
         for ep in episodes:
             link = ep.xpath("./a/@href").get()
             title = ep.xpath("./a/text()").get().split('.')[0]
-            des = f'{description}\n 磁力下载地址：<a href="{link} title="{title}""></a>'
+            des = f'<img src="{img}"><br>{description}<br> 磁力下载地址：<a href="{link}">{title}</a>'
             _item = Item(title=title, link=link, pub_date=datetime.now(), description=des)
             items_list.append(_item)
 

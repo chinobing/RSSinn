@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from models.utils import fetch
+from models.upptime import add_upptime_status
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
@@ -10,12 +11,12 @@ import re
 
 chinastarmarket = APIRouter()
 
-description="""
+description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
 
 - 来源：`https://www.chinastarmarket.cn/telegraph`
 - 参数：没有
-- 状态： ![Uptime](https://img.shields.io/endpoint?url=https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/api/chinastarmarket/uptime.json)
+- 状态： {add_upptime_status('chinastarmarket')}
 """
 
 @chinastarmarket.get("/telegraph/",

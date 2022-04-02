@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from models.utils import fetch
-from settings import upptime_url
+from models.upptime import add_upptime_status
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
@@ -11,12 +11,12 @@ import re
 
 kr = APIRouter()
 
-description="""
+description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
 
 - 来源：`https://36kr.com/newsflashes/`
 - 参数：没有
-- 状态： ![Uptime](https://img.shields.io/endpoint?url=https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/api/36kr/uptime.json)
+- 状态： {add_upptime_status('36kr')}
 """
 
 
