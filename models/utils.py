@@ -58,6 +58,7 @@ async def fetch(url: str,
             tree = Selector(text=res)
             return tree
 
+
 def filter_content(items, filters: Optional[dict] = None):
     """Returns a mapping of member item->item.
     This maps all items from a list with customized include_keywords or exclude_keywords.
