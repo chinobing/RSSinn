@@ -18,4 +18,8 @@ COPY ./rssinn /rssinn
 # https://github.com/Yelp/dumb-init/
 ENTRYPOINT ["dumb-init", "--"]
 
-CMD ["gunicorn", "run:app", "-w", "2", "-k","uvicorn.workers.UvicornH11Worker", "-b", "0.0.0.0:28085", "--timeout", "1000"]
+#CMD ["gunicorn", "run:app", "-w", "2", "-k","uvicorn.workers.UvicornH11Worker", "-b", "0.0.0.0:28085", "--timeout", "1000"]
+
+#“RemoteProtocolError: illegal request line”、“PRI”、“invalid http request received” errors solved by 余生的观澜
+#https://blog.csdn.net/qq_25310669/article/details/120535803
+CMD ["daphne", "run:app", "-b", "0.0.0.0", "-p", "28085"]
