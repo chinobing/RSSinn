@@ -7,5 +7,5 @@ index = APIRouter()
 
 @index.get("/", include_in_schema=False)
 async def home_page():
-    response = RedirectResponse(url='/status')
+    response = RedirectResponse(url='/upptime')
     return response
