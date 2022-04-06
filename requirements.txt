@@ -9,3 +9,5 @@ asyncache==0.1.1
 cachetools==5.0.0
 uvicorn==0.17.6
 gunicorn
+daphne
+psutil
