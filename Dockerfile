@@ -13,13 +13,13 @@ COPY ./requirements.txt /code/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt -i  https://pypi.tuna.tsinghua.edu.cn/simple
 
-COPY ./rssinn /rssinn
+COPY . /rssinn
 
-# https://github.com/Yelp/dumb-init/
 ENTRYPOINT ["dumb-init", "--"]
 
-#CMD ["gunicorn", "run:app", "-w", "2", "-k","uvicorn.workers.UvicornH11Worker", "-b", "0.0.0.0:28085", "--timeout", "1000"]
+#CMD ["gunicorn", "run:app", "-w", "2", "-k","uvicorn.workers.UvicornH11Worker", "-b", "0.0.0.0:28085", "--timeout", "600", "--keep-alive", "0"]
 
-#“RemoteProtocolError: illegal request line”、“PRI”、“invalid http request received” errors solved by 余生的观澜
 #https://blog.csdn.net/qq_25310669/article/details/120535803
 CMD ["daphne", "run:app", "-b", "0.0.0.0", "-p", "28085"]
+
+#CMD ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "28085"]
