@@ -34,7 +34,10 @@ async def newsflashes():
     data_text = re.findall(r'<script>window.initialState=(.*?)</', response)
     str_data = "".join(data_text)
     json_data = json.loads(str_data)
-    item_list = json_data['newsflashCatalogData']['data']['newsflashList']['data']['itemList']
+    if json_data['newsflashCatalogData']:
+        item_list = json_data['newsflashCatalogData']['data']['newsflashList']['data']['itemList']
+    else:
+        item_list = json_data['newsflashList']['flow']['itemList']
 
     items_list = []
     for item in item_list:

@@ -63,12 +63,10 @@ async def xl_movies(id:Optional[int] = None):
         link = post.xpath(".//h3[contains(@class,'entry-title')]/a/@href").get()
         _title = post.xpath(".//h3[contains(@class,'entry-title')]//text()").get()
         _rating = post.xpath(".//div[contains(@class,'entry-rating')]//text()").get().replace(" ", "")
-        # rating = f'[{_rating}] ' if _rating else ""
         title =f'[{_rating}]{_title}'
         description = post.xpath(".//div[contains(@class,'entry-excerpt')]/p/text()").get()
         _item = Item(title=title, link=link, pub_date=datetime.now(), description=description)
         items_list.append(_item)
-
 
     feed_data = {
         'title': '迅雷电影天堂 xl720.com',
