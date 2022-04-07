@@ -24,39 +24,48 @@ class filter_keywords:
         self.exclude_keywords = exclude_keywords
 
 ##################################################################################
-from functools import partial, wraps
-def hash_dict(func):
-    """Transform mutable dictionnary
-    Into immutable
-    Useful to be compatible with cache
-    """
-    class HDict(dict):
-        def __hash__(self):
-            return hash(frozenset(self.items()))
+# from functools import partial, wraps
+# def hash_dict(func):
+#     """Transform mutable dictionnary
+#     Into immutable
+#     Useful to be compatible with cache
+#     """
+#     class HDict(dict):
+#         def __hash__(self):
+#             return hash(frozenset(self.items()))
+#
+#     @wraps(func)
+#     def wrapped(*args, **kwargs):
+#         args = tuple([HDict(arg) if isinstance(arg, dict) else arg for arg in args])
+#         kwargs = {k: HDict(v) if isinstance(v, dict) else v for k, v in kwargs.items()}
+#         return func(*args, **kwargs)
+#     return wrapped
 
-    @wraps(func)
-    def wrapped(*args, **kwargs):
-        args = tuple([HDict(arg) if isinstance(arg, dict) else arg for arg in args])
-        kwargs = {k: HDict(v) if isinstance(v, dict) else v for k, v in kwargs.items()}
-        return func(*args, **kwargs)
-    return wrapped
+from models.process_killer import zombies_process_killer
 
 async def fetch(url: str,
                 headers: dict=DEFAULT_HEADERS,
                 proxies: Optional[Union[str, dict]] = None,
                 fetch_js:Optional[bool]=None):
     if fetch_js == True:
-        asession = AsyncHTMLSession()
-        r = await asession.get(url, headers=headers, proxies=proxies)
-        await r.html.arender()
-        await asession.close()
-        return r.text
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, headers=headers, proxy=proxies) as resp:
-            res = await resp.text()
-            tree = Selector(text=res)
-            return tree
+        try:
+            asession = AsyncHTMLSession()
+            r = await asession.get(url, headers=headers, proxies=proxies)
+            await r.html.arender(timeout=20, sleep=2)
+            await asession.close()
+        except Exception as e:
+            print(f'[Err] {e}')
+            zombies_process_killer()
+        else:
+            return r.text
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, proxy=proxies) as resp:
+                res = await resp.text()
+                tree = Selector(text=res)
+                return tree
+    except Exception as e:
+        print(f'[Err] {e}')
 
 
 def filter_content(items, filters: Optional[dict] = None):
