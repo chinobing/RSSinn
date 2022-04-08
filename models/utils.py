@@ -84,7 +84,7 @@ async def fetch(urls: Union[str, List],
         all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
         if 'ERROR' in all_results:
             return ""
-        trees = [Selector(text=res) for res in all_results]
+        trees = [Selector(text=res) for res in all_results if "ERROR" not in res]
         return trees
 
         return all_results
