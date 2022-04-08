@@ -106,14 +106,11 @@ async def fetch(urls: Union[str, List],
             return ""
 
         if fetch_js == True:
-            return all_results
+            trees = [res for res in all_results if "ERROR" not in res]
+            return trees
 
         trees = [Selector(text=res) for res in all_results if "ERROR" not in res]
         return trees
-
-        return all_results
-
-
 
 
 def filter_content(items, filters: Optional[dict] = None):
