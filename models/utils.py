@@ -2,12 +2,11 @@ import asyncio
 from fastapi import Query
 from parsel import Selector
 from typing import Optional, Union, List, Tuple
-from requests_html import AsyncHTMLSession
 from models.process_killer import zombies_process_killer
 
 from collections import Coroutine
 from pages.index import SingletonAiohttp
-
+from pages.index import SingletonRequestsHtml
 
 DEFAULT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
 
@@ -57,33 +56,58 @@ async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
                 proxy: Optional[str] = None,
                 fetch_js:Optional[bool]=None):
-    if fetch_js == True:
-        try:
-            asession = AsyncHTMLSession()
-            r = await asession.get(urls, headers=headers, proxies={'http': proxy})
-            await r.html.arender(timeout=20, sleep=2)
-            await asession.close()
-        except Exception as e:
-            print(f'[Err] {e}')
-            zombies_process_killer()
-        else:
-            return r.text
+    # if fetch_js == True:
+    #     if isinstance(urls, str):
+    #         res = await SingletonRequestsHtml.query_url(urls, headers=headers, proxy=proxy)
+    #         print(res)
+    #         if 'ERROR' in res:
+    #             return ""
+    #         tree = Selector(text=res)
+    #         return tree
+    #
+    #     if isinstance(urls, list):
+    #         async_calls: List[Coroutine] = list()  # store all async operations
+    #         for url in urls:
+    #             async_calls.append(SingletonRequestsHtml.query_url(url, headers=headers, proxy=proxy))
+    #
+    #         all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
+    #         if 'ERROR' in all_results:
+    #             return ""
+    #         trees = [Selector(text=res) for res in all_results if "ERROR" not in res]
+    #         return trees
+    #
+    #         return all_results
 
     if isinstance(urls, str):
-        res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
+        if fetch_js == True:
+            res = await SingletonRequestsHtml.query_url(urls, headers=headers, proxy=proxy)
+        else:
+            res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
+
         if 'ERROR' in res:
             return ""
+
+        if fetch_js == True:
+            return res
+
         tree = Selector(text=res)
         return tree
 
     if isinstance(urls, list):
         async_calls: List[Coroutine] = list()  # store all async operations
         for url in urls:
-            async_calls.append(SingletonAiohttp.query_url(url, headers=headers, proxy=proxy))
+            if fetch_js == True:
+                async_calls.append(SingletonRequestsHtml.query_url(url, headers=headers, proxy=proxy))
+            else:
+                async_calls.append(SingletonAiohttp.query_url(url, headers=headers, proxy=proxy))
 
         all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
         if 'ERROR' in all_results:
             return ""
+
+        if fetch_js == True:
+            return all_results
+
         trees = [Selector(text=res) for res in all_results if "ERROR" not in res]
         return trees
 
