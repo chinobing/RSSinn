@@ -1,5 +1,5 @@
 import asyncio
-from fastapi import Query
+from fastapi import Query, HTTPException
 from parsel import Selector
 from typing import Optional, Union, List, Tuple
 from models.process_killer import zombies_process_killer
@@ -81,11 +81,13 @@ async def fetch(urls: Union[str, List],
     if isinstance(urls, str):
         if fetch_js == True:
             res = await SingletonRequestsHtml.query_url(urls, headers=headers, proxy=proxy)
+            await SingletonRequestsHtml.close_requests_client()
         else:
             res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
 
         if 'ERROR' in res:
-            return ""
+            raise HTTPException(status_code=404, detail="Item not found")
+            # return ""
 
         if fetch_js == True:
             return res
@@ -98,18 +100,26 @@ async def fetch(urls: Union[str, List],
         for url in urls:
             if fetch_js == True:
                 async_calls.append(SingletonRequestsHtml.query_url(url, headers=headers, proxy=proxy))
+                await SingletonRequestsHtml.close_requests_client()
             else:
                 async_calls.append(SingletonAiohttp.query_url(url, headers=headers, proxy=proxy))
 
         all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
-        if 'ERROR' in all_results:
-            return ""
+        # if 'ERROR' in all_results:
+        #     raise HTTPException(status_code=404, detail="Item not found")
+        #     return ""
 
         if fetch_js == True:
             trees = [res for res in all_results if "ERROR" not in res]
+            if not trees:
+                raise HTTPException(status_code=404, detail="Item not found")
+                # return ""
             return trees
 
         trees = [Selector(text=res) for res in all_results if "ERROR" not in res]
+        if not trees:
+            raise HTTPException(status_code=404, detail="Item not found")
+            # return ""
         return trees
 
 

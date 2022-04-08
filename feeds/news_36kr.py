@@ -31,8 +31,6 @@ async def newsflashes():
     fake = Faker()
     FAKE_HEADERS = {'User-Agent':fake.user_agent()}
     response = await fetch(url, headers=FAKE_HEADERS, fetch_js=True)
-    if not response:
-        return
     data_text = re.findall(r'<script>window.initialState=(.*?)</', response)
     str_data = "".join(data_text)
     json_data = json.loads(str_data)
