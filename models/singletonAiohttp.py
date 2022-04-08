@@ -35,6 +35,7 @@ class SingletonAiohttp:
 
         try:
             async with client.get(url, headers=headers, proxy=proxy) as response:
+                cls.close_aiohttp_client()
                 if response.status != 200:
                     return {"ERROR OCCURED" + str(await response.text())}
                 text_result = await response.text()

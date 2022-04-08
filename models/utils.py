@@ -56,34 +56,14 @@ async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
                 proxy: Optional[str] = None,
                 fetch_js:Optional[bool]=None):
-    # if fetch_js == True:
-    #     if isinstance(urls, str):
-    #         res = await SingletonRequestsHtml.query_url(urls, headers=headers, proxy=proxy)
-    #         print(res)
-    #         if 'ERROR' in res:
-    #             return ""
-    #         tree = Selector(text=res)
-    #         return tree
-    #
-    #     if isinstance(urls, list):
-    #         async_calls: List[Coroutine] = list()  # store all async operations
-    #         for url in urls:
-    #             async_calls.append(SingletonRequestsHtml.query_url(url, headers=headers, proxy=proxy))
-    #
-    #         all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
-    #         if 'ERROR' in all_results:
-    #             return ""
-    #         trees = [Selector(text=res) for res in all_results if "ERROR" not in res]
-    #         return trees
-    #
-    #         return all_results
 
     if isinstance(urls, str):
         if fetch_js == True:
             res = await SingletonRequestsHtml.query_url(urls, headers=headers, proxy=proxy)
-            await SingletonRequestsHtml.close_requests_client()
+            # await SingletonRequestsHtml.close_requests_client()
         else:
             res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
+            # await SingletonAiohttp.close_aiohttp_client()
 
         if 'ERROR' in res:
             raise HTTPException(status_code=404, detail="Item not found")
@@ -100,9 +80,10 @@ async def fetch(urls: Union[str, List],
         for url in urls:
             if fetch_js == True:
                 async_calls.append(SingletonRequestsHtml.query_url(url, headers=headers, proxy=proxy))
-                await SingletonRequestsHtml.close_requests_client()
+                # await SingletonRequestsHtml.close_requests_client()
             else:
                 async_calls.append(SingletonAiohttp.query_url(url, headers=headers, proxy=proxy))
+                # await SingletonAiohttp.close_aiohttp_client()
 
         all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
         # if 'ERROR' in all_results:
