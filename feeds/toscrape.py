@@ -109,14 +109,19 @@ async def quotes_with_filter(filters=Depends(filter_keywords)):
 @cached(TTLCache(1024,  ttl=timedelta(weeks=4).total_seconds())) #cache缓存结果一个月，用于demo
 async def authors():
     tree = await fetch(url)
+    if not tree:
+        return
     links = tree.xpath("//div[@class='quote']/span/a/@href").getall()
+    links = [f'{url}{uri}' for uri in links]
+
+    results = await fetch(links)
+    if not results:
+        return
 
     items_list = []
-    for each in links:
-        link = f'{url}{each}'
-        author_page =  await fetch(link)
-        author = author_page.xpath("//h3[@class='author-title']//text()").get()
-        description = author_page.xpath("//div[@class='author-description']//text()").get()
+    for link, each in zip(links, results):
+        author = each.xpath("//h3[@class='author-title']//text()").get()
+        description = each.xpath("//div[@class='author-description']//text()").get()
         _item = Item(title=author, link=link, author=author, description=description)
         items_list.append(_item)
 

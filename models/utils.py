@@ -1,8 +1,12 @@
-import aiohttp
+import asyncio
 from fastapi import Query
 from parsel import Selector
-from typing import Optional, Union
+from typing import Optional, Union, List, Tuple
 from requests_html import AsyncHTMLSession
+from models.process_killer import zombies_process_killer
+
+from collections import Coroutine
+from pages.index import SingletonAiohttp
 
 
 DEFAULT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
@@ -23,34 +27,40 @@ class filter_keywords:
         self.include_keywords = include_keywords
         self.exclude_keywords = exclude_keywords
 
-##################################################################################
-# from functools import partial, wraps
-# def hash_dict(func):
-#     """Transform mutable dictionnary
-#     Into immutable
-#     Useful to be compatible with cache
-#     """
-#     class HDict(dict):
-#         def __hash__(self):
-#             return hash(frozenset(self.items()))
-#
-#     @wraps(func)
-#     def wrapped(*args, **kwargs):
-#         args = tuple([HDict(arg) if isinstance(arg, dict) else arg for arg in args])
-#         kwargs = {k: HDict(v) if isinstance(v, dict) else v for k, v in kwargs.items()}
-#         return func(*args, **kwargs)
-#     return wrapped
+# async def fetch(url: str,
+#                 headers: dict=DEFAULT_HEADERS,
+#                 proxies: Optional[Union[str, dict]] = None,
+#                 fetch_js:Optional[bool]=None):
+#     if fetch_js == True:
+#         try:
+#             asession = AsyncHTMLSession()
+#             r = await asession.get(url, headers=headers, proxies=proxies)
+#             await r.html.arender(timeout=20, sleep=2)
+#             await asession.close()
+#         except Exception as e:
+#             print(f'[Err] {e}')
+#             zombies_process_killer()
+#         else:
+#             return r.text
+#     try:
+#         async with aiohttp.ClientSession() as session:
+#             async with session.get(url, headers=headers, proxy=proxies) as resp:
+#                 res = await resp.text()
+#                 tree = Selector(text=res)
+#                 return tree
+#     except Exception as e:
+#         print(f'[Err] {e}')
 
-from models.process_killer import zombies_process_killer
 
-async def fetch(url: str,
+
+async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
-                proxies: Optional[Union[str, dict]] = None,
+                proxy: Optional[str] = None,
                 fetch_js:Optional[bool]=None):
     if fetch_js == True:
         try:
             asession = AsyncHTMLSession()
-            r = await asession.get(url, headers=headers, proxies=proxies)
+            r = await asession.get(urls, headers=headers, proxies={'http': proxy})
             await r.html.arender(timeout=20, sleep=2)
             await asession.close()
         except Exception as e:
@@ -58,14 +68,28 @@ async def fetch(url: str,
             zombies_process_killer()
         else:
             return r.text
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers, proxy=proxies) as resp:
-                res = await resp.text()
-                tree = Selector(text=res)
-                return tree
-    except Exception as e:
-        print(f'[Err] {e}')
+
+    if isinstance(urls, str):
+        res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
+        if 'ERROR' in res:
+            return ""
+        tree = Selector(text=res)
+        return tree
+
+    if isinstance(urls, list):
+        async_calls: List[Coroutine] = list()  # store all async operations
+        for url in urls:
+            async_calls.append(SingletonAiohttp.query_url(url, headers=headers, proxy=proxy))
+
+        all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
+        if 'ERROR' in all_results:
+            return ""
+        trees = [Selector(text=res) for res in all_results]
+        return trees
+
+        return all_results
+
+
 
 
 def filter_content(items, filters: Optional[dict] = None):
