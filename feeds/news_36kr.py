@@ -7,7 +7,6 @@ from datetime import datetime
 from asyncache import cached
 from cachetools import TTLCache
 import json
-import re
 
 kr = APIRouter()
 
@@ -24,14 +23,14 @@ description=f"""
               summary="36kr-实时快讯",
               description=description)
 
-@cached(TTLCache(1024, 300)) #cache result for 300 seconds
+# @cached(TTLCache(1024, 300)) #cache result for 300 seconds
 async def newsflashes():
     url = 'https://36kr.com/newsflashes/'
 
     fake = Faker()
-    FAKE_HEADERS = {'User-Agent':fake.user_agent()}
-    response = await fetch(url, headers=FAKE_HEADERS, fetch_js=True)
-    data_text = re.findall(r'<script>window.initialState=(.*?)</', response)
+    FAKE_HEADERS = {'Host':'36kr.com', 'User-Agent':fake.user_agent()}
+    response = await fetch(url, headers=FAKE_HEADERS)
+    data_text = response.re(r'<script>window.initialState=(.*?)</')[0]
     str_data = "".join(data_text)
     json_data = json.loads(str_data)
     if json_data['newsflashCatalogData']:
