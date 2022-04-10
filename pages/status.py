@@ -14,7 +14,7 @@ templates = Jinja2Templates(directory='./templates')
 async def status_page(request: Request):
     return templates.TemplateResponse("status.html",{"request": request})
 
-@cached(TTLCache(1024, 300)) #cache result for 300 seconds
+# @cached(TTLCache(1024, 300)) #cache result for 300 seconds
 @status.get("/upptime", include_in_schema=False)
 async def upptime_page(request: Request):
     url = "https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/README.md"

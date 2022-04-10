@@ -8,6 +8,7 @@ from collections import Coroutine
 from pages.index import SingletonAiohttp
 from pages.index import SingletonRequestsHtml
 
+
 DEFAULT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
 
 class filter_keywords:
@@ -59,11 +60,11 @@ async def fetch(urls: Union[str, List],
 
     if isinstance(urls, str):
         if fetch_js == True:
+            SingletonRequestsHtml.close_requests_client()
             res = await SingletonRequestsHtml.query_url(urls, headers=headers, proxy=proxy)
-            # await SingletonRequestsHtml.close_requests_client()
         else:
+            SingletonAiohttp.close_aiohttp_client()
             res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
-            # await SingletonAiohttp.close_aiohttp_client()
 
         if 'ERROR' in res:
             raise HTTPException(status_code=404, detail="Item not found")
@@ -80,10 +81,10 @@ async def fetch(urls: Union[str, List],
         for url in urls:
             if fetch_js == True:
                 async_calls.append(SingletonRequestsHtml.query_url(url, headers=headers, proxy=proxy))
-                # await SingletonRequestsHtml.close_requests_client()
+                SingletonRequestsHtml.close_requests_client()
             else:
                 async_calls.append(SingletonAiohttp.query_url(url, headers=headers, proxy=proxy))
-                # await SingletonAiohttp.close_aiohttp_client()
+                SingletonAiohttp.close_aiohttp_client()
 
         all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
         # if 'ERROR' in all_results:

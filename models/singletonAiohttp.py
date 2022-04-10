@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 from socket import AF_INET
 from typing import Optional
+from fastapi import HTTPException
 
 SIZE_POOL_AIOHTTP = 100
 
@@ -15,7 +16,7 @@ class SingletonAiohttp:
     def get_aiohttp_client(cls) -> aiohttp.ClientSession:
         if cls.aiohttp_client is None:
             timeout = aiohttp.ClientTimeout(total=20)
-            connector = aiohttp.TCPConnector(family=AF_INET, limit_per_host=SIZE_POOL_AIOHTTP)
+            connector = aiohttp.TCPConnector(family=AF_INET, limit_per_host=SIZE_POOL_AIOHTTP, enable_cleanup_closed=True)
             cls.aiohttp_client = aiohttp.ClientSession(timeout=timeout, connector=connector)
 
         return cls.aiohttp_client
@@ -35,9 +36,10 @@ class SingletonAiohttp:
 
         try:
             async with client.get(url, headers=headers, proxy=proxy) as response:
-                cls.close_aiohttp_client()
                 if response.status != 200:
-                    return {"ERROR OCCURED" + str(await response.text())}
+                    # return {"ERROR OCCURED" + str(await response.text())}
+                    cls.close_aiohttp_client()
+                    raise HTTPException(status_code=response.status, detail="Item not found, please try again!")
                 text_result = await response.text()
         except Exception as e:
             return {"ERROR": e}
