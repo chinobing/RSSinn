@@ -5,8 +5,8 @@ from typing import Optional, Union, List, Tuple
 from models.process_killer import zombies_process_killer
 
 from collections import Coroutine
-from pages.index import SingletonAiohttp
-from pages.index import SingletonRequestsHtml
+from models.singletonAiohttp import SingletonAiohttp
+from models.singletonRequests import SingletonRequestsHtml
 
 
 DEFAULT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
@@ -60,11 +60,11 @@ async def fetch(urls: Union[str, List],
 
     if isinstance(urls, str):
         if fetch_js == True:
-            SingletonRequestsHtml.close_requests_client()
             res = await SingletonRequestsHtml.query_url(urls, headers=headers, proxy=proxy)
+            await SingletonRequestsHtml.close_requests_client()
         else:
-            SingletonAiohttp.close_aiohttp_client()
             res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
+            await SingletonAiohttp.close_aiohttp_client()
 
         if 'ERROR' in res:
             raise HTTPException(status_code=404, detail="Item not found")

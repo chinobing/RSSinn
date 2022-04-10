@@ -31,7 +31,6 @@ class SingletonRequestsHtml:
 
         try:
             response = await client.get(url, headers=headers, proxies={'http':proxy})
-            cls.close_requests_client()
             if response.status_code != 200:
                 return {"ERROR OCCURED" + str(await response.html.arender())}
             await response.html.arender(timeout=20, sleep=2)

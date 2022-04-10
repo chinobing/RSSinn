@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 
 
-
 #设置upptime status的路径， https://upptime.js.org/， 地址为https://cdn.jsdelivr.net/gh/github账户/repo名称@master
 upptime_status_url = 'https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master'
+
+
 
 
 
@@ -16,5 +17,5 @@ def app_settings() -> FastAPI():
                                 "defaultModelsExpandDepth": -1,
                                 "filter": True
                                   },
-    }
+            }
 
