@@ -1,13 +1,11 @@
-<!doctype html>
-<html>
-   <head>
-      <meta charset="utf-8"/>
-      <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-      <title>Rssinn Upptime Status</title>
-      <link rel="shortcut icon" href="{{ url_for('static', path='/media/favicon.ico') }}" type="image/x-icon"/>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-      <link rel="stylesheet" href="{{ url_for('static', path='/css/custom.css') }}">
-   </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rssinn 小黑屋</title>
+    <link rel="shortcut icon" href="{{ url_for('static', path='/media/favicon.ico') }}" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+</head>
 <body>
     <div class="container">
         <div>
@@ -71,25 +69,45 @@
               </div>
             </nav>
         </div>
-        <section class="section has-text-centered">
+        <section class="section has-text-centered is-medium">
             <div class="hero-body">
               <h1 class="title">RSSinn</h1>
               <h2 class="subtitle">小黑屋</h2>
             </div>
 
         </section>
+        <section class="hero bd-hero bd-is-basic ">
+            <nav class="level">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="subtitle is-6 is-spaced">#RSS</p>
+                  <p class="title">{{ data['total_routes_numbers'] }}</p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="subtitle is-6 is-spaced">#UP</p>
+                  <p class="title">{{ data['routes_status_up']}}</p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="subtitle is-6 is-spaced">#DOWN</p>
+                  <p class="title">{{ data['routes_status_down']}}</p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="subtitle is-6 is-spaced">#STARS</p>
+                  <p class="title">N/A</p>
+                </div>
+              </div>
+            </nav>
+        </section>
 
-         <section class="section">
-           <div class="container">
-             <div class="columns is-centered">
-               <div class="column is-four-fifths">
-                  {{ table|safe }}
-               </div>
-             </div>
-           </div>
-         </section>
+        <section class="section">
 
-
+        </section>
     </div>
     <footer class="footer">
       <div class="content has-text-centered">
@@ -97,7 +115,7 @@
             ©2022 RSSinn.COM | Designed and built with all the ❤ and 😁 by <a href="https://github.com/chinobing">Chinobing</a>.
         </p>
       </div>
-       <script defer data-domain="rssinn.com" src="https://hosting.f10.org/js/plausible.js"></script>
+        <script defer data-domain="rssinn.com" src="https://hosting.f10.org/js/plausible.js"></script>
     </footer>
 </body>
 </html>
