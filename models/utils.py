@@ -1,4 +1,5 @@
 import asyncio
+import json
 from fastapi import Query, HTTPException
 from parsel import Selector
 from typing import Optional, Union, List, Tuple
@@ -27,32 +28,6 @@ class filter_keywords:
         self.include_keywords = include_keywords
         self.exclude_keywords = exclude_keywords
 
-# async def fetch(url: str,
-#                 headers: dict=DEFAULT_HEADERS,
-#                 proxies: Optional[Union[str, dict]] = None,
-#                 fetch_js:Optional[bool]=None):
-#     if fetch_js == True:
-#         try:
-#             asession = AsyncHTMLSession()
-#             r = await asession.get(url, headers=headers, proxies=proxies)
-#             await r.html.arender(timeout=20, sleep=2)
-#             await asession.close()
-#         except Exception as e:
-#             print(f'[Err] {e}')
-#             zombies_process_killer()
-#         else:
-#             return r.text
-#     try:
-#         async with aiohttp.ClientSession() as session:
-#             async with session.get(url, headers=headers, proxy=proxies) as resp:
-#                 res = await resp.text()
-#                 tree = Selector(text=res)
-#                 return tree
-#     except Exception as e:
-#         print(f'[Err] {e}')
-
-
-
 async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
                 proxy: Optional[str] = None,
@@ -70,7 +45,7 @@ async def fetch(urls: Union[str, List],
             raise HTTPException(status_code=404, detail="Item not found")
             # return ""
 
-        if fetch_js == True:
+        if fetch_js == True or validateJSON(res):
             return res
 
         tree = Selector(text=res)
@@ -91,7 +66,7 @@ async def fetch(urls: Union[str, List],
         #     raise HTTPException(status_code=404, detail="Item not found")
         #     return ""
 
-        if fetch_js == True:
+        if fetch_js == True or validateJSON(all_results[0]):
             trees = [res for res in all_results if "ERROR" not in res]
             if not trees:
                 raise HTTPException(status_code=404, detail="Item not found")
@@ -137,3 +112,9 @@ def filter_content(items, filters: Optional[dict] = None):
 
     return [dict(t) for t in {tuple(d.items()) for d in content}]
 
+def validateJSON(jsonData):
+    try:
+        json.loads(jsonData)
+    except ValueError as err:
+        return False
+    return True
