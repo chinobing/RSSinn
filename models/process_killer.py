@@ -36,13 +36,13 @@ def findProcessIdByName(processName):
     return listOfProcessObjects;
 
 
-def kill_child_processes(parent_pid, sig=signal.SIGTERM):
+async def kill_child_processes(parent_pid, sig=signal.SIGTERM):
     try:
         parent = psutil.Process(parent_pid)
     except psutil.NoSuchProcess:
         return
     children = parent.children(recursive=True)
-    print(children)
+    # print(children)
     for process in children:
         process.send_signal(sig)
 
@@ -59,7 +59,7 @@ def kill_child_processes(parent_pid, sig=signal.SIGTERM):
     # for elem in procObjList:
     #    print (elem)
 
-def zombies_process_killer():
+async def zombies_process_killer():
     print("*** Check if a process is running or not ***")
     # Check if any chrome process was running or not.
     if checkIfProcessRunning('chrome'):
@@ -78,9 +78,9 @@ def zombies_process_killer():
            create_time = datetime.strptime(processCreationTime, '%Y-%m-%d %H:%M:%S')
            now = datetime.now()
            delta = now - create_time
-           if delta.seconds>=1:
+           if delta.seconds>=60:
                print(f'process_ID={processID}, process_Name={processName}, Created_Time {processCreationTime}, running for {delta.seconds} seconds. Process has been killed at {now}.')
-               kill_child_processes(processID)
+               await kill_child_processes(processID)
     else :
        print('No Running Process found with given text')
     # print('** Find running process by name using List comprehension **')

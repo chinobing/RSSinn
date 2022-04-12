@@ -37,6 +37,8 @@ async def fetch(urls: Union[str, List],
         if fetch_js == True:
             res = await SingletonRequestsHtml.query_url(urls, headers=headers, proxy=proxy)
             await SingletonRequestsHtml.close_requests_client()
+            await zombies_process_killer()
+
         else:
             res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
             await SingletonAiohttp.close_aiohttp_client()
@@ -57,6 +59,7 @@ async def fetch(urls: Union[str, List],
             if fetch_js == True:
                 async_calls.append(SingletonRequestsHtml.query_url(url, headers=headers, proxy=proxy))
                 SingletonRequestsHtml.close_requests_client()
+                await zombies_process_killer()
             else:
                 async_calls.append(SingletonAiohttp.query_url(url, headers=headers, proxy=proxy))
                 SingletonAiohttp.close_aiohttp_client()
