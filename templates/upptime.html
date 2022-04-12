@@ -18,19 +18,19 @@
                   <img src="{{ url_for('static', path='/media/logo-1649663131875.png') }}" width="112" height="28">
                 </a>
 
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
                   <span aria-hidden="true"></span>
                   <span aria-hidden="true"></span>
                   <span aria-hidden="true"></span>
                 </a>
               </div>
 
-              <div id="navbarBasicExample" class="navbar-menu">
+              <div id="navbarBasic" class="navbar-menu">
                 <div class="navbar-start">
                   <a class="navbar-item" href="/">
                     Home
                   </a>
-                  <a class="navbar-item" href="/upptime" target="_blank">
+                  <a class="navbar-item" href="/upptime">
                     Status
                   </a>
                   <a class="navbar-item" href="/docs" target="_blank">
@@ -81,12 +81,8 @@
         </section>
 
          <section class="section">
-           <div class="container">
-             <div class="columns is-centered">
-               <div class="column is-four-fifths">
-                  {{ table|safe }}
-               </div>
-             </div>
+           <div class="table-container">
+               {{ table|safe }}
            </div>
          </section>
 
@@ -98,7 +94,6 @@
             ©2022 RSSinn.COM | Designed and built with all the ❤ and 😁 by <a href="https://github.com/chinobing">Chinobing</a>.
         </p>
       </div>
-       <script defer data-domain="rssinn.com" src="https://hosting.f10.org/js/plausible.js"></script>
     </footer>
 </body>
 </html>

@@ -24,7 +24,7 @@ async def upptime_page(request: Request):
     html = markdown.markdown(content, extensions=['markdown.extensions.tables'])
     table = html.replace('./','https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/')
     table = table.replace('https%3A%2F%2Fraw.githubusercontent.com%2Fchinobing%2Fupptime-rssinn%2FHEAD', 'https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/')
-    table = table.replace('<img alt="" src="https://favicons.githubusercontent.com/rssinn.com" height="13">','')
+    table = table.replace('<img alt="" src="https://favicons.githubusercontent.com/www.rssinn.com" height="13">','').replace('<img alt="" src="https://favicons.githubusercontent.com/rssinn.com" height="13">','')
     table = table.replace('<table>', '<table class="table is-striped is-fullwidth">')
 
     return templates.TemplateResponse("upptime.html",{"request": request, "table":table})
