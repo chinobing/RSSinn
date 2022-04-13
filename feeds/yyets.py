@@ -39,9 +39,10 @@ async def top():
     items_list = []
     for item in results:
         json_item = json.loads(item)
-        title = f"[{json_item['rating']}]{json_item['name']}"
+        _rating = f"{json_item['rating']}分" if json_item['rating'] else ""
+        title = f"[{_rating}]{json_item['name']}"
         img = json_item['posterLink']
-        description = F"<img src='{img}'><br>{json_item['introduction']}<br>豆瓣：<a href=‘{json_item['doubanLink']}’>{title}</a>"
+        description = f"<img src='{img}'><br>{json_item['introduction']}<br><br>豆瓣地址：<a href=‘{json_item['doubanLink']}’>{title}</a>"
         link = f"https://yyets.dmesg.app/resource?id={json_item['resourceId']}"
         releaseDate = json_item['releaseDate'][:10]
         pub_date = datetime.strptime(releaseDate, '%Y-%m-%d')
