@@ -39,7 +39,7 @@ async def top():
     items_list = []
     for item in results:
         json_item = json.loads(item)
-        title = json_item['name']
+        title = f"[{json_item['rating']}]{json_item['name']}"
         img = json_item['posterLink']
         description = F"<img src='{img}'><br>{json_item['introduction']}<br>豆瓣：<a href=‘{json_item['doubanLink']}’>{title}</a>"
         link = f"https://yyets.dmesg.app/resource?id={json_item['resourceId']}"
