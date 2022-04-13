@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pages import index, status
 
-from feeds import toscrape, bridgewater, chinastarmarket, esnai, kr, xl720, tenjqka
+from feeds import toscrape, bridgewater, chinastarmarket, esnai, kr, xl720, tenjqka, yyets
 
 
 router = APIRouter()
@@ -25,7 +25,7 @@ router.include_router(tenjqka, prefix='/10jqka', tags = ['新闻 | News'])
 
 """娱乐|Entertainment"""
 router.include_router(xl720, prefix='/xl720', tags = ['媒体 | Entertainment'])
-
+router.include_router(yyets, prefix='/yyets', tags = ['媒体 | Entertainment'])
 
 """DEMO"""
 router.include_router(toscrape, prefix='/toscrape', tags = ['DEMO'])

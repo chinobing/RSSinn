@@ -1,17 +1,9 @@
 from fastapi import APIRouter, Request
-from fastapi.responses import RedirectResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
-import markdown
 
 index = APIRouter()
 templates = Jinja2Templates(directory='./templates')
-
-# @index.get("/", include_in_schema=False)
-# async def home_page():
-#     response = RedirectResponse(url='/upptime')
-#     return response
 
 
 @index.get("/", include_in_schema=False)
@@ -23,7 +15,6 @@ async def home_page(request: Request):
     routes_status_down = len([True for x in up_down if x['status'] == 'down'])
 
     total_routes_numbers = len(up_down)
-
 
     data = {}
     data['total_routes_numbers'] = total_routes_numbers

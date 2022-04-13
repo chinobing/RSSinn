@@ -1,10 +1,8 @@
 from fastapi import Request, APIRouter
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import markdown
 import requests
-from asyncache import cached
-from cachetools import TTLCache
+import re
 
 status = APIRouter()
 templates = Jinja2Templates(directory='./templates')
@@ -24,8 +22,8 @@ async def upptime_page(request: Request):
     html = markdown.markdown(content, extensions=['markdown.extensions.tables'])
     table = html.replace('./','https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/')
     table = table.replace('https%3A%2F%2Fraw.githubusercontent.com%2Fchinobing%2Fupptime-rssinn%2FHEAD', 'https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/')
-    table = table.replace('<img alt="" src="https://favicons.githubusercontent.com/www.rssinn.com" height="13">','').replace('<img alt="" src="https://favicons.githubusercontent.com/rssinn.com" height="13">','')
     table = table.replace('<table>', '<table class="table is-striped is-fullwidth">')
+    table = re.sub(r"<img(.*?)height=\"13\">","",table, re.MULTILINE)
 
     return templates.TemplateResponse("upptime.html",{"request": request, "table":table})
 
