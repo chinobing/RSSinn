@@ -12,3 +12,4 @@ gunicorn
 daphne
 psutil
 markdown
+playwright

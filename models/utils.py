@@ -1,6 +1,6 @@
 import asyncio
 import json
-from fastapi import Query, HTTPException
+from fastapi import Query, HTTPException, Depends
 from parsel import Selector
 from typing import Optional, Union, List, Tuple
 from models.process_killer import zombies_process_killer
@@ -8,6 +8,11 @@ from models.process_killer import zombies_process_killer
 from collections import Coroutine
 from models.singletonAiohttp import SingletonAiohttp
 from models.singletonRequests import SingletonRequestsHtml
+
+
+from models.browser import Browser
+from settings import Settings, get_settings
+from playwright.async_api import Page
 
 
 DEFAULT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
@@ -28,6 +33,8 @@ class filter_keywords:
         self.include_keywords = include_keywords
         self.exclude_keywords = exclude_keywords
 
+import logging
+logger = logging.getLogger('browser')
 async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
                 proxy: Optional[str] = None,
@@ -35,17 +42,27 @@ async def fetch(urls: Union[str, List],
 
     if isinstance(urls, str):
         if fetch_js == True:
-            res = await SingletonRequestsHtml.query_url(urls, headers=headers, proxy=proxy)
-            await SingletonRequestsHtml.close_requests_client()
-            await zombies_process_killer()
+            browser = Browser(get_settings())
+            await browser.start(headless=True)
+            logger.info("Browser launched.")
+            print("Browser launched.")
 
+            page = await browser.new_page()
+            response = await page.goto(urls)
+            if response.status != 200:
+                await page.close()
+                raise HTTPException(status_code=404, detail="Item not found")
+            res = await response.text()
+            await page.close()
+            await browser.shutdown()
+            logger.info("Browser shutdown.")
+            print("Browser shutdown.")
         else:
             res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
             await SingletonAiohttp.close_aiohttp_client()
 
         if 'ERROR' in res:
             raise HTTPException(status_code=404, detail="Item not found")
-            # return ""
 
         if fetch_js == True or validateJSON(res):
             return res
