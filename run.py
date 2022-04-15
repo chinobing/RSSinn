@@ -6,26 +6,20 @@ from routes import router as api_router
 from models.http_error import http_exception_handler
 from models.validation_error import http422_error_handler, RequestValidationError
 from models.catch_exceptions import catch_exceptions_middleware
-
 from models.singletonAiohttp import SingletonAiohttp
-from models.singletonRequests import SingletonRequestsHtml
+from models.read_yaml import parsing_yaml
 from fastapi.logger import logger
 fastAPI_logger = logger  # convenient name
-
-from settings import app_settings
-
 
 async def on_start_up():
     fastAPI_logger.info("on_start_up")
     SingletonAiohttp.get_aiohttp_client()
-    SingletonRequestsHtml.get_requests_client()
 
 async def on_shutdown():
     fastAPI_logger.info("on_shutdown")
     await SingletonAiohttp.close_aiohttp_client()
-    await SingletonRequestsHtml.close_requests_client()
 
-settings = app_settings()
+settings = parsing_yaml()['app_setting']
 settings['on_startup'] = [on_start_up]
 settings['on_shutdown'] = [on_shutdown]
 app = FastAPI(**settings)

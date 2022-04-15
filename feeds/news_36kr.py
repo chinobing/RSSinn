@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 from models.utils import fetch
-from models.upptime import add_upptime_status
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
@@ -15,7 +14,6 @@ description=f"""
 
 - 来源：`https://36kr.com/newsflashes/`
 - 参数：没有
-- 状态： {add_upptime_status('36kr')}
 """
 
 

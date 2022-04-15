@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 from typing import Optional
 from models.utils import fetch
-from models.upptime import add_upptime_status
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
@@ -16,7 +15,6 @@ description=f"""
 - 参数： **id**
 - 路由： `/xl720/?id=[]`
 - Tips： 如：https://www.xl720.com/thunder/46198.html， `对应id为46198`
-- 状态： {add_upptime_status('xl720')}
 """
 
 

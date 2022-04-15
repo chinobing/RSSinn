@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, Query
 from typing import Optional
 from models.utils import DEFAULT_HEADERS, fetch, filter_keywords, filter_content
-from models.upptime import add_upptime_status
 from fastapi_rss import RSSFeed, RSSResponse, Item
 
 esnai = APIRouter()
@@ -13,7 +12,6 @@ description=f"""
 - 参数：**cat**， **include_keywords**， **exclude_keywords**
 - 路由： `/esnai/?cat=[]&include_keywords=[]&exclude_keywords=[]`
 - Tips：对于cpa业务探讨(`?cat=7`)，可以选择包含关键字【`chenyiwei-aegis-fanxu7788-nikankan-henry204618-复制忍者卡卡西`】
-- 状态： {add_upptime_status('esnai')}
 """
 
 @esnai.get("/", summary='会计视野论坛', description=description)
