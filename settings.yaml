@@ -11,3 +11,9 @@ upptime:
      jsdelivr_CDN: True
      github: "chinobing"
      repo: "upptime-rssinn"
+
+# Playwright Browser Connection
+fetch_proxy_settings:
+    PROXY_SERVER: ""  # Supports http and socks proxies.
+    PROXY_USERNAME: ""
+    PROXY_PASSWORD: ""

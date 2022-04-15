@@ -7,13 +7,11 @@ from models.process_killer import zombies_process_killer
 
 from collections import Coroutine
 from models.singletonAiohttp import SingletonAiohttp
-from models.singletonRequests import SingletonRequestsHtml
-
 
 from models.browser import Browser
-from settings import Settings, get_settings
-from playwright.async_api import Page
+from models.read_yaml import parsing_yaml
 
+fetch_proxy_settings = parsing_yaml()['fetch_proxy_settings']
 
 DEFAULT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
 
@@ -37,12 +35,12 @@ import logging
 logger = logging.getLogger('browser')
 async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
-                proxy: Optional[str] = None,
+                # proxy: Optional[dict] = None,
                 fetch_js:Optional[bool]=None):
 
     if isinstance(urls, str):
         if fetch_js == True:
-            browser = Browser(get_settings())
+            browser = Browser(fetch_proxy_settings)
             await browser.start(headless=True)
             logger.info("Browser launched.")
 
@@ -57,7 +55,7 @@ async def fetch(urls: Union[str, List],
             await browser.shutdown()
             logger.info("Browser shutdown.")
         else:
-            res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
+            res = await SingletonAiohttp.query_url(urls, headers=headers, _settings=fetch_proxy_settings)
             await SingletonAiohttp.close_aiohttp_client()
 
         if 'ERROR' in res:

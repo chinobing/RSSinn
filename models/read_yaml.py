@@ -1,6 +1,8 @@
 import yaml
 import logging
+from functools import lru_cache
 
+@lru_cache()
 def parsing_yaml():
     with open("./settings.yaml", 'rb') as stream:
         try:

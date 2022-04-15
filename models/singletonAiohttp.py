@@ -30,12 +30,20 @@ class SingletonAiohttp:
     @classmethod
     async def query_url(cls, url: str,
                         headers: Optional[dict] = None,
-                        proxy: Optional[str] = None,
+                        _settings: Optional[dict] = None,
                         ):
         client = cls.get_aiohttp_client()
 
+        if _settings['PROXY_USERNAME'] and _settings['PROXY_PASSWORD']:
+            proxy_auth = aiohttp.BasicAuth(_settings['PROXY_USERNAME'], _settings['PROXY_PASSWORD'])
+        else:
+            proxy_auth = None
+        if _settings['PROXY_SERVER']:
+            proxy_server = _settings['PROXY_SERVER']
+        else:
+            proxy_server = None
         try:
-            async with client.get(url, headers=headers, proxy=proxy) as response:
+            async with client.get(url, headers=headers, proxy=proxy_server, proxy_auth=proxy_auth) as response:
                 if response.status != 200:
                     cls.close_aiohttp_client()
                     raise HTTPException(status_code=response.status, detail="Item not found, please try again!")
