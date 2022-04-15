@@ -4,6 +4,8 @@ docker build -t "rssinn" .
 docker run -it --rm -p 28085:28085 rssinn
 
 ## PDM
+加入path：`export PATH=/root/.local/bin:$PATH`
+
 pdm run uvicorn run:app --host 0.0.0.0 --port 28085 --reload --debug
 pdm run daphne run:app -b 0.0.0.0 -p 28085
 
