@@ -45,18 +45,17 @@ async def fetch(urls: Union[str, List],
             browser = Browser(get_settings())
             await browser.start(headless=True)
             logger.info("Browser launched.")
-            print("Browser launched.")
 
             page = await browser.new_page()
             response = await page.goto(urls)
             if response.status != 200:
                 await page.close()
+                await browser.shutdown()
                 raise HTTPException(status_code=404, detail="Item not found")
             res = await response.text()
             await page.close()
             await browser.shutdown()
             logger.info("Browser shutdown.")
-            print("Browser shutdown.")
         else:
             res = await SingletonAiohttp.query_url(urls, headers=headers, proxy=proxy)
             await SingletonAiohttp.close_aiohttp_client()
@@ -74,9 +73,10 @@ async def fetch(urls: Union[str, List],
         async_calls: List[Coroutine] = list()  # store all async operations
         for url in urls:
             if fetch_js == True:
-                async_calls.append(SingletonRequestsHtml.query_url(url, headers=headers, proxy=proxy))
-                SingletonRequestsHtml.close_requests_client()
-                await zombies_process_killer()
+                # async_calls.append(SingletonRequestsHtml.query_url(url, headers=headers, proxy=proxy))
+                # SingletonRequestsHtml.close_requests_client()
+                # await zombies_process_killer()
+                raise HTTPException(status_code=404, detail="fetch_js does not support multiple urls yet. ")
             else:
                 async_calls.append(SingletonAiohttp.query_url(url, headers=headers, proxy=proxy))
                 SingletonAiohttp.close_aiohttp_client()
