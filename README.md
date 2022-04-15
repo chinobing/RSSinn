@@ -11,6 +11,7 @@ docker run -it --rm -p 28085:28085 rssinn
 
 后台运行：
 #https://stackoverflow.com/questions/36465899/how-to-run-flask-server-in-the-background
+
 `nohup pdm run daphne run:app -b 0.0.0.0 -p 28085 > log.txt 2>&1 &`
 
 
