@@ -8,7 +8,9 @@ templates = Jinja2Templates(directory='./templates')
 
 @index.get("/", include_in_schema=False)
 async def home_page(request: Request):
+    purge_url = "https://purge.jsdelivr.net/gh/chinobing/upptime-rssinn@master/history/summary.json"
     summary_url = "https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/history/summary.json"
+    requests.get(purge_url)
     response = requests.get(summary_url)
     up_down = response.json()
     routes_status_up =len([True for x in up_down if x['status']=='up'])
@@ -23,3 +25,4 @@ async def home_page(request: Request):
 
 
     return templates.TemplateResponse("index.html",{"request": request, "data":data})
+

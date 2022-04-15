@@ -15,7 +15,9 @@ async def status_page(request: Request):
 
 @status.get("/upptime", include_in_schema=False)
 async def upptime_page(request: Request):
+    purge = "https://purge.jsdelivr.net/gh/chinobing/upptime-rssinn@master/README.md"
     url = "https://cdn.jsdelivr.net/gh/chinobing/upptime-rssinn@master/README.md"
+    requests.get(purge)
     response = requests.get(url)
     content = response.text
     content = content.split('status page.')[1].split('[**Visit')[0]
