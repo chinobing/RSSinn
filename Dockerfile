@@ -1,4 +1,3 @@
-
 FROM ubuntu:20.04
 
 RUN apt-get update && \
@@ -41,15 +40,13 @@ COPY ./requirements.txt ./requirements.txt
 
 RUN pip3 install --no-cache-dir --upgrade -r ./requirements.txt -i  https://pypi.tuna.tsinghua.edu.cn/simple
 
-RUN playwright install
-
 RUN playwright install chromium
 
-COPY . /rssinn
+COPY . .
 
 ENTRYPOINT ["dumb-init", "--"]
 
-EXPOSE 8085
+EXPOSE 28085
 
 RUN chmod +x start.sh
 ENTRYPOINT ["./start.sh"]
