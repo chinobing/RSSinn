@@ -4,7 +4,6 @@ from models.utils import fetch
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
-from models.decorator import cache
 
 xl720 = APIRouter()
 
@@ -21,7 +20,6 @@ description=f"""
 @xl720.get("/",
               summary="迅雷电影天堂 xl720.com",
               description=description)
-@cache()
 async def xl_movies(id:Optional[int] = None):
     fake = Faker()
     FAKE_HEADERS = {'User-Agent':fake.user_agent()}
