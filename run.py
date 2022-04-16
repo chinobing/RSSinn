@@ -41,17 +41,17 @@ app.middleware('http')(catch_exceptions_middleware)
 async def startup():
     if cache_setting['enabled'] == False:
         return
+    if cache_setting['enabled'] == True:
+        if cache_setting['method'] =='in-memory':
+            from fastapi_cache.backends.inmemory import InMemoryBackend
+            FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
 
-    if cache_setting['method'] =='in-memory':
-        from fastapi_cache.backends.inmemory import InMemoryBackend
-        FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
-
-    if cache_setting['method'] =='redis':
-        import aioredis
-        from fastapi_cache.backends.redis import RedisBackend
-        redis_url = cache_setting['redis_url']
-        redis =  aioredis.from_url(redis_url, encoding="utf8", decode_responses=True)
-        FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+        if cache_setting['method'] =='redis':
+            import aioredis
+            from fastapi_cache.backends.redis import RedisBackend
+            redis_url = cache_setting['redis_url']
+            redis =  aioredis.from_url(redis_url, encoding="utf8", decode_responses=False)
+            FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
 if __name__ == '__main__':
     uvicorn.run('run:app', host='localhost', port=28085, reload=True, debug=True)

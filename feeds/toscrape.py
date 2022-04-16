@@ -111,7 +111,7 @@ Toscrape.com, 获取次页面的数据，并使用了cache来缓存结果
 
 @toscrape.get("/authors/", summary='关于作者介绍',
               description='获取次页面的数据，并使用了cache来缓存结果')
-@cached()
+@cached("toscrape-authors")
 async def authors():
     tree = await fetch(url)
     if not tree:
