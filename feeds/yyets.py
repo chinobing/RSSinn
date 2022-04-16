@@ -92,7 +92,7 @@ async def discuss():
     items_list = []
     for item in results:
         content = item['content']
-        if 'http' in content:
+        if 'http' in content and 'aliyundrive' in content:
             title = content.split('http')[0]
             description = content
             link = re.search(r"https://www.aliyundrive.com/s/(.*?)...........", content).group()
