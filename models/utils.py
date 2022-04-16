@@ -71,18 +71,12 @@ async def fetch(urls: Union[str, List],
         async_calls: List[Coroutine] = list()  # store all async operations
         for url in urls:
             if fetch_js == True:
-                # async_calls.append(SingletonRequestsHtml.query_url(url, headers=headers, proxy=proxy))
-                # SingletonRequestsHtml.close_requests_client()
-                # await zombies_process_killer()
                 raise HTTPException(status_code=404, detail="fetch_js does not support multiple urls yet. ")
             else:
                 async_calls.append(SingletonAiohttp.query_url(url, headers=headers, proxy=proxy))
                 SingletonAiohttp.close_aiohttp_client()
 
         all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
-        # if 'ERROR' in all_results:
-        #     raise HTTPException(status_code=404, detail="Item not found")
-        #     return ""
 
         if fetch_js == True or validateJSON(all_results[0]):
             trees = [res for res in all_results if "ERROR" not in res]
