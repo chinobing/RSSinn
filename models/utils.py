@@ -1,13 +1,11 @@
 import asyncio
 import json
-from fastapi import Query, HTTPException, Depends
+import logging
+from fastapi import Query, HTTPException
 from parsel import Selector
 from typing import Optional, Union, List, Tuple
-from models.process_killer import zombies_process_killer
-
 from collections import Coroutine
 from models.singletonAiohttp import SingletonAiohttp
-
 from models.browser import Browser
 from models.read_yaml import parsing_yaml
 
@@ -31,15 +29,17 @@ class filter_keywords:
         self.include_keywords = include_keywords
         self.exclude_keywords = exclude_keywords
 
-import logging
-logger = logging.getLogger('browser')
+
 async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
-                # proxy: Optional[dict] = None,
+                proxy: Optional[dict] = None,
                 fetch_js:Optional[bool]=None):
+    if isinstance(proxy, dict):
+        fetch_proxy_settings.update(PROXY_SERVER=proxy['PROXY_SERVER'],PROXY_USERNAME=proxy['PROXY_USERNAME'],PROXY_PASSWORD=proxy['PROXY_PASSWORD'])
 
     if isinstance(urls, str):
         if fetch_js == True:
+            logger = logging.getLogger('browser')
             browser = Browser(fetch_proxy_settings)
             await browser.start(headless=True)
             logger.info("Browser launched.")
