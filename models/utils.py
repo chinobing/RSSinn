@@ -82,13 +82,11 @@ async def fetch(urls: Union[str, List],
             trees = [res for res in all_results if "ERROR" not in res]
             if not trees:
                 raise HTTPException(status_code=404, detail="Item not found")
-                # return ""
             return trees
 
         trees = [Selector(text=res) for res in all_results if "ERROR" not in res]
         if not trees:
             raise HTTPException(status_code=404, detail="Item not found")
-            # return ""
         return trees
 
 
