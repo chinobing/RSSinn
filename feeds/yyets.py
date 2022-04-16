@@ -3,7 +3,7 @@ from models.utils import fetch
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
-from models.decorator import cache
+from models.decorator import cached
 import json
 import re
 
@@ -23,7 +23,7 @@ top_description=f"""
 @yyets.get("/top/",
               summary="YYeTs-全站热搜",
               description=top_description)
-@cache()
+@cached()
 async def top():
     url = 'https://yyets.dmesg.app/api/top'
 
@@ -75,7 +75,7 @@ discuss_description=f"""
 @yyets.get("/discuss/",
               summary="YYeTs-评论区资源-阿里云盘",
               description=discuss_description)
-@cache()
+@cached()
 async def discuss():
     url = 'https://yyets.dmesg.app/api/comment?resource_id=233&page=1&size=20'
 

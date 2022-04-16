@@ -3,7 +3,7 @@ from models.utils import fetch
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
-from models.decorator import cache
+from models.decorator import cached
 import json
 import re
 
@@ -19,7 +19,7 @@ description=f"""
 @chinastarmarket.get("/telegraph/",
               summary="科创板电报",
               description=description)
-@cache()
+@cached()
 async def telegraph():
     url = 'https://www.chinastarmarket.cn/telegraph'
 

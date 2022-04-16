@@ -3,7 +3,7 @@ from models.utils import fetch
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
-from models.decorator import cache
+from models.decorator import cached
 import json
 
 kr = APIRouter()
@@ -19,7 +19,7 @@ description=f"""
 @kr.get("/newsflashes/",
               summary="36kr-实时快讯",
               description=description)
-@cache()
+@cached()
 async def newsflashes():
     url = 'https://36kr.com/newsflashes/'
 

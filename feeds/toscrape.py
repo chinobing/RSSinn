@@ -3,7 +3,7 @@ from typing import Optional
 from models.utils import DEFAULT_HEADERS, fetch, filter_keywords, filter_content
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
-from models.decorator import cache
+from models.decorator import cached
 
 toscrape = APIRouter()
 
@@ -111,7 +111,7 @@ Toscrape.com, 获取次页面的数据，并使用了cache来缓存结果
 
 @toscrape.get("/authors/", summary='关于作者介绍',
               description='获取次页面的数据，并使用了cache来缓存结果')
-@cache()
+@cached()
 async def authors():
     tree = await fetch(url)
     if not tree:

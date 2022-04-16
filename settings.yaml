@@ -18,9 +18,10 @@ fetch_proxy_settings:
     PROXY_USERNAME: ""
     PROXY_PASSWORD: ""
 
-# Settings for in-memoery cache
+# Settings for cache
 related_settings:
     cached:
         enabled: True
-        maxsize: 1024 #The maximum size of the cache.
+        method: "in-memory" # in-memory or redis
+        redis_url: "redis://localhost" # eg. redis://:password@ip_address:port
         expiration_time: 300 # Time in seconds for cached feeds to expire after
