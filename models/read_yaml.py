@@ -10,5 +10,4 @@ def parsing_yaml():
         except yaml.YAMLError as exc:
             logging.info(exc)
         finally:
-            print(parsed_yaml)
             return parsed_yaml

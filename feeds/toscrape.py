@@ -3,16 +3,16 @@ from typing import Optional
 from models.utils import DEFAULT_HEADERS, fetch, filter_keywords, filter_content
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
-from asyncache import cached
-from cachetools import TTLCache
-from datetime import timedelta
+from models.decorator import cache
 
 toscrape = APIRouter()
 
 url = 'https://quotes.toscrape.com/'
 
 
-
+"""
+Toscrape.com, 获取首页所有quotes
+"""
 @toscrape.get("/quotes/",
               summary="获取首页所有quotes",
               description="直接输入网址获取首页所有quotes")
@@ -38,7 +38,9 @@ async def quotes():
     feed = RSSFeed(**feed_data)
     return RSSResponse(feed)
 
-
+"""
+Toscrape.com, 获取带指定tag的所有quotes
+"""
 @toscrape.get("/quotes_tag/",
               summary="获取带指定tag的所有quotes",
               description="输入指定的tag获取quotes")
@@ -71,8 +73,9 @@ async def quotes_tag(tag:Optional[str] = None):
     feed = RSSFeed(**feed_data)
     return RSSResponse(feed)
 
-
-
+"""
+Toscrape.com, 获取带指定关键字的所有quotes
+"""
 @toscrape.get("/quotes_with_filter/",
               summary="获取带指定关键字的所有quotes",
               description="`inculde_keywords`：包含指定的关键字；`exclude_keywords`：不含指定关键字；")
@@ -102,11 +105,13 @@ async def quotes_with_filter(filters=Depends(filter_keywords)):
     feed = RSSFeed(**feed_data)
     return RSSResponse(feed)
 
-
+"""
+Toscrape.com, 获取次页面的数据，并使用了cache来缓存结果
+"""
 
 @toscrape.get("/authors/", summary='关于作者介绍',
               description='获取次页面的数据，并使用了cache来缓存结果')
-@cached(TTLCache(1024,  ttl=timedelta(weeks=4).total_seconds())) #cache缓存结果一个月，用于demo
+@cache()
 async def authors():
     tree = await fetch(url)
     if not tree:

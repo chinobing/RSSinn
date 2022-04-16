@@ -73,8 +73,8 @@ async def fetch(urls: Union[str, List],
             if fetch_js == True:
                 raise HTTPException(status_code=404, detail="fetch_js does not support multiple urls yet. ")
             else:
-                async_calls.append(SingletonAiohttp.query_url(url, headers=headers, proxy=proxy))
-                SingletonAiohttp.close_aiohttp_client()
+                async_calls.append(SingletonAiohttp.query_url(url, headers=headers,  _settings=fetch_proxy_settings))
+                await SingletonAiohttp.close_aiohttp_client()
 
         all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
 
@@ -82,6 +82,7 @@ async def fetch(urls: Union[str, List],
             trees = [res for res in all_results if "ERROR" not in res]
             if not trees:
                 raise HTTPException(status_code=404, detail="Item not found")
+
             return trees
 
         trees = [Selector(text=res) for res in all_results if "ERROR" not in res]

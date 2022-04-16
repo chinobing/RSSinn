@@ -3,7 +3,7 @@ from models.utils import fetch
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
-
+from models.decorator import cache
 
 bridgewater = APIRouter()
 
@@ -17,6 +17,7 @@ description=f"""
 @bridgewater.get("/research/",
               summary="桥水（Bridgewater)研究与观察",
               description=description)
+@cache()
 async def research():
     url = 'https://www.bridgewater.com/research-and-insights'
 

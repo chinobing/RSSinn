@@ -3,8 +3,7 @@ from models.utils import fetch
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
-from asyncache import cached
-from cachetools import TTLCache
+from models.decorator import cache
 import json
 import re
 
@@ -24,7 +23,7 @@ top_description=f"""
 @yyets.get("/top/",
               summary="YYeTs-全站热搜",
               description=top_description)
-@cached(TTLCache(1024, 300)) #cache result for 300 seconds
+@cache()
 async def top():
     url = 'https://yyets.dmesg.app/api/top'
 
@@ -76,7 +75,7 @@ discuss_description=f"""
 @yyets.get("/discuss/",
               summary="YYeTs-评论区资源-阿里云盘",
               description=discuss_description)
-@cached(TTLCache(1024, 300)) #cache result for 300 seconds
+@cache()
 async def discuss():
     url = 'https://yyets.dmesg.app/api/comment?resource_id=233&page=1&size=20'
 

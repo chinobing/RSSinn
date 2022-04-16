@@ -9,7 +9,11 @@ from models.catch_exceptions import catch_exceptions_middleware
 from models.singletonAiohttp import SingletonAiohttp
 from models.read_yaml import parsing_yaml
 from fastapi.logger import logger
+
 fastAPI_logger = logger  # convenient name
+yaml = parsing_yaml()
+app_setting = yaml['app_setting']
+cache_setting = yaml['related_settings']['cached']
 
 async def on_start_up():
     fastAPI_logger.info("on_start_up")
@@ -19,10 +23,28 @@ async def on_shutdown():
     fastAPI_logger.info("on_shutdown")
     await SingletonAiohttp.close_aiohttp_client()
 
-settings = parsing_yaml()['app_setting']
-settings['on_startup'] = [on_start_up]
-settings['on_shutdown'] = [on_shutdown]
-app = FastAPI(**settings)
+
+app_setting['on_startup'] = [on_start_up]
+app_setting['on_shutdown'] = [on_shutdown]
+app = FastAPI(**app_setting)
+
+
+# from fastapi_cache import FastAPICache
+
+# @app.on_event("startup")
+# async def startup():
+#     if cache_setting['enabled'] == False:
+#         return
+#
+#     if cache_setting['method'] =='in-memory':
+#         from fastapi_cache.backends.inmemory import InMemoryBackend
+#         FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
+#     if cache_setting['method'] =='redis':
+#         import aioredis
+#         from fastapi_cache.backends.redis import RedisBackend
+#         redis =  aioredis.from_url("redis://localhost", encoding="utf8", decode_responses=True)
+#         FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(api_router)

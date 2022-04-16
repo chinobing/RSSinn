@@ -3,8 +3,7 @@ from models.utils import fetch
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
-from asyncache import cached
-from cachetools import TTLCache
+from models.decorator import cache
 import json
 
 tenjqka = APIRouter()
@@ -19,8 +18,7 @@ realtimenews_description=f"""
 @tenjqka.get("/realtimenews/",
               summary="同花顺财经-实时快讯",
               description=realtimenews_description)
-
-# @cached(TTLCache(1024, 300)) #cache result for 300 seconds
+@cache()
 async def realtimenews():
     url = 'https://news.10jqka.com.cn/tapp/news/push/stock/?page=1&tag=&track=website&pagesize=100'
 
