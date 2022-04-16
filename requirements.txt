@@ -5,8 +5,7 @@ fastapi==0.73.0
 Jinja2==3.1.1
 parsel==1.6.0
 requests-html==0.10.0
-asyncache==0.1.1
-cachetools==5.0.0
+fastapi-cache2==0.1.8
 markdown==3.3.6
 pyyaml
 psutil
