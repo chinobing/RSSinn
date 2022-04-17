@@ -15,7 +15,7 @@ def nocache(*args, **kwargs):
 
 def cached(namespace: Optional[str]=None):
     if cached_settings['enabled'] == False:
-        _cache = nocache
+        _cache = nocache(namespace=namespace)
 
     if cached_settings['enabled'] == True:
         if cached_settings['method']=="in-memory":
