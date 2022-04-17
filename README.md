@@ -10,8 +10,9 @@ docker run -it --rm -p 28085:28085 rssinn
 `pdm run daphne run:app -b 0.0.0.0 -p 28085`
 
 
-后台运行[说明](https://stackoverflow.com/questions/36465899/how-to-run-flask-server-in-the-background)：`nohup pdm run daphne run:app -b 0.0.0.0 -p 28085 > log.txt 2>&1 &`
-
+后台运行[说明](https://stackoverflow.com/questions/36465899/how-to-run-flask-server-in-the-background)：
+1. `nohup pdm run daphne run:app -b 0.0.0.0 -p 28085 > log.txt 2>&1 &`
+2. `nohup pdm run uvicorn run:app --host 0.0.0.0 --port 28085 > log.txt 2>&1 &`
 
 
 
