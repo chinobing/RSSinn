@@ -60,12 +60,12 @@ async def kill_child_processes(parent_pid, sig=signal.SIGTERM):
     #    print (elem)
 
 async def zombies_process_killer():
-    print("*** Check if a process is running or not ***")
+    # print("*** Check if a process is running or not ***")
     # Check if any chrome process was running or not.
-    if checkIfProcessRunning('chrome'):
-        print('Yes a chrome process was running')
-    else:
-        print('No chrome process was running')
+    # if checkIfProcessRunning('chrome'):
+    #     print('Yes a chrome process was running')
+    # else:
+    #     print('No chrome process was running')
     # print("*** Find PIDs of a running process by Name ***")
     # Find PIDs od all the running instances of process that contains 'chrome' in it's name
     listOfProcessIds = findProcessIdByName('chrome')
