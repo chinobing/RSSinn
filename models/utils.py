@@ -35,10 +35,10 @@ async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
                 proxy: Optional[dict] = None,
                 fetch_js:Optional[bool]=None):
-    
+
     if checkIfProcessRunning('chrome'):
         print('Yes a chrome process was running')
-        zombies_process_killer()
+        await zombies_process_killer()
 
     if isinstance(proxy, dict):
         fetch_proxy_settings.update(PROXY_SERVER=proxy['PROXY_SERVER'],PROXY_USERNAME=proxy['PROXY_USERNAME'],PROXY_PASSWORD=proxy['PROXY_PASSWORD'])
