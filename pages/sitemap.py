@@ -17,7 +17,7 @@ async def home_page(request: Request):
 
     data = {}
     data['base_url'] = request.base_url
-    data['lastmod'] = datetime.now()
+    data['lastmod'] = datetime.today().strftime("%Y-%m-%d")
     data['routes'] = all_routes
 
     return templates.TemplateResponse("sitemap.xml",{"request": request, "data":data} , media_type="application/xml")
