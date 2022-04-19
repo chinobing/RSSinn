@@ -42,7 +42,7 @@ async def top():
     items_list = []
     for item in results:
         json_item = json.loads(item)
-        _rating = f"[{json_item['rating']}]分" if "rating" in json_item else ""
+        _rating = f"[{json_item['rating']}分]" if "rating" in json_item else ""
         title = f"{_rating}{json_item['name']}"
         img = json_item['posterLink']
         description = f"<img src='{img}'><br>{json_item['introduction']}<br><br>豆瓣地址：<a href=‘{json_item['doubanLink']}’>{title}</a>"
