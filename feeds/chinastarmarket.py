@@ -9,13 +9,18 @@ import re
 
 chinastarmarket = APIRouter()
 
+"""
+-------------------------------------------------
+   Description :     科创板电报
+   Modified_date：   2022/04/19
+-------------------------------------------------
+"""
 description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
 
 - 来源：`https://www.chinastarmarket.cn/telegraph`
 - 参数：没有
 """
-
 @chinastarmarket.get("/telegraph/",
               summary="科创板电报",
               description=description)

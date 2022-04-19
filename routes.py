@@ -1,14 +1,12 @@
 from fastapi import APIRouter
-from pages import index, status
-
+from pages import index, status, sitemap
 from feeds import toscrape, bridgewater, chinastarmarket, esnai, kr, xl720, tenjqka, yyets
 
-
 router = APIRouter()
+"""RSSINN|Routes"""
 router.include_router(index)
 router.include_router(status)
-
-
+router.include_router(sitemap)
 
 
 """媒体|Media"""

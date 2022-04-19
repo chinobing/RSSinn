@@ -9,9 +9,11 @@ toscrape = APIRouter()
 
 url = 'https://quotes.toscrape.com/'
 
-
 """
-Toscrape.com, 获取首页所有quotes
+-------------------------------------------------
+   Description :     Toscrape.com, 获取首页所有quotes
+   Modified_date：   2022/04/19
+-------------------------------------------------
 """
 @toscrape.get("/quotes/",
               summary="获取首页所有quotes",
@@ -39,7 +41,10 @@ async def quotes():
     return RSSResponse(feed)
 
 """
-Toscrape.com, 获取带指定tag的所有quotes
+-------------------------------------------------
+   Description :     Toscrape.com, 获取带指定tag的所有quotes
+   Modified_date：   2022/04/19
+-------------------------------------------------
 """
 @toscrape.get("/quotes_tag/",
               summary="获取带指定tag的所有quotes",
@@ -74,7 +79,10 @@ async def quotes_tag(tag:Optional[str] = None):
     return RSSResponse(feed)
 
 """
-Toscrape.com, 获取带指定关键字的所有quotes
+-------------------------------------------------
+   Description :     Toscrape.com, 获取带指定关键字的所有quotes
+   Modified_date：   2022/04/19
+-------------------------------------------------
 """
 @toscrape.get("/quotes_with_filter/",
               summary="获取带指定关键字的所有quotes",
@@ -106,9 +114,11 @@ async def quotes_with_filter(filters=Depends(filter_keywords)):
     return RSSResponse(feed)
 
 """
-Toscrape.com, 获取次页面的数据，并使用了cache来缓存结果
+-------------------------------------------------
+   Description :     Toscrape.com, 获取作者介绍的数据，并使用了cache来缓存结果
+   Modified_date：   2022/04/19
+-------------------------------------------------
 """
-
 @toscrape.get("/authors/", summary='关于作者介绍',
               description='获取次页面的数据，并使用了cache来缓存结果')
 @cached()

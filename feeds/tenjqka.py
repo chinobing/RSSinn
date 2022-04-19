@@ -8,13 +8,18 @@ import json
 
 tenjqka = APIRouter()
 
+"""
+-------------------------------------------------
+   Description :     同花顺财经-实时快讯
+   Modified_date：   2022/04/19
+-------------------------------------------------
+"""
 realtimenews_description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
 
 - 来源：`https://news.10jqka.com.cn/realtimenews.html`
 - 参数：没有
 """
-
 @tenjqka.get("/realtimenews/",
               summary="同花顺财经-实时快讯",
               description=realtimenews_description)

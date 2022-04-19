@@ -7,13 +7,18 @@ from models.decorator import cached
 
 bridgewater = APIRouter()
 
+"""
+-------------------------------------------------
+   Description :     桥水（Bridgewater)研究与观察
+   Modified_date：   2022/04/19
+-------------------------------------------------
+"""
 description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
 
 - 来源：`https://www.bridgewater.com/research-and-insights/`
 - 参数：没有
 """
-
 @bridgewater.get("/research/",
               summary="桥水（Bridgewater)研究与观察",
               description=description)

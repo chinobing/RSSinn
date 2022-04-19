@@ -6,6 +6,12 @@ from fastapi_rss import RSSFeed, RSSResponse, Item
 
 esnai = APIRouter()
 
+"""
+-------------------------------------------------
+   Description :     会计视野论坛
+   Modified_date：   2022/04/19
+-------------------------------------------------
+"""
 description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
 
@@ -14,7 +20,6 @@ description=f"""
 - 路由： `/esnai/?cat=[]&include_keywords=[]&exclude_keywords=[]`
 - Tips：对于cpa业务探讨(`?cat=7`)，可以选择包含关键字【`chenyiwei-aegis-fanxu7788-nikankan-henry204618-复制忍者卡卡西`】
 """
-
 @esnai.get("/", summary='会计视野论坛', description=description)
 @cached()
 async def bbs_esnai(cat:Optional[int] = Query(None, description="输入子论坛数字，如https://bbs.esnai.com/forum-7-1.html，则输入`7`"),

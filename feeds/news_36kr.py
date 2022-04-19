@@ -8,14 +8,18 @@ import json
 
 kr = APIRouter()
 
+"""
+-------------------------------------------------
+   Description :     36kr-实时快讯
+   Modified_date：   2022/04/19
+-------------------------------------------------
+"""
 description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
 
 - 来源：`https://36kr.com/newsflashes/`
 - 参数：没有
 """
-
-
 @kr.get("/newsflashes/",
               summary="36kr-实时快讯",
               description=description)

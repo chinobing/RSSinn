@@ -8,6 +8,12 @@ from datetime import datetime
 
 xl720 = APIRouter()
 
+"""
+-------------------------------------------------
+   Description :     迅雷电影天堂 xl720.com
+   Modified_date：   2022/04/19
+-------------------------------------------------
+"""
 description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
 
@@ -16,8 +22,6 @@ description=f"""
 - 路由： `/xl720/?id=[]`
 - Tips： 如：https://www.xl720.com/thunder/46198.html， `对应id为46198`
 """
-
-
 @xl720.get("/",
               summary="迅雷电影天堂 xl720.com",
               description=description)

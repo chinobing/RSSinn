@@ -9,9 +9,11 @@ import re
 
 yyets = APIRouter()
 
-
 """
-yyets 全站热搜  
+-------------------------------------------------
+   Description :     yyets 全站热搜  
+   Modified_date：   2022/04/19
+-------------------------------------------------
 """
 top_description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
@@ -19,7 +21,6 @@ top_description=f"""
 - 来源：`https://yyets.dmesg.app/search`
 - 参数：没有
 """
-
 @yyets.get("/top/",
               summary="YYeTs-全站热搜",
               description=top_description)
@@ -61,9 +62,11 @@ async def top():
     feed = RSSFeed(**feed_data)
     return RSSResponse(feed)
 
-
 """
-yyets 评论区资源-阿里云盘
+-------------------------------------------------
+   Description :     yyets 评论区资源-阿里云盘
+   Modified_date：   2022/04/19
+-------------------------------------------------
 """
 discuss_description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
