@@ -17,7 +17,7 @@ description=f"""
 @bridgewater.get("/research/",
               summary="桥水（Bridgewater)研究与观察",
               description=description)
-@cached("bridgewater-research")
+@cached()
 async def research():
     url = 'https://www.bridgewater.com/research-and-insights'
 

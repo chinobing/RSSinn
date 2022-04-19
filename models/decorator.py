@@ -1,6 +1,5 @@
 # from asyncache import cached
 # from cachetools import TTLCache
-from typing import Optional
 from fastapi_cache.decorator import cache
 from fastapi_cache.coder import PickleCoder
 from models.read_yaml import parsing_yaml
@@ -13,15 +12,11 @@ def nocache(*args, **kwargs):
         return func
     return decorator
 
-def cached(namespace: Optional[str]=None):
-    if cached_settings['enabled'] == False:
-        _cache = nocache(namespace=namespace)
-
+def cached():
     if cached_settings['enabled'] == True:
-        if cached_settings['method']=="in-memory":
-            _cache = cache(namespace=namespace, expire=expiration_time, coder=PickleCoder)
-        if cached_settings['method']=="redis":
-            _cache = cache(namespace=namespace, expire=expiration_time, coder=PickleCoder)
+        _cache = cache(namespace="rssinn", expire=expiration_time, coder=PickleCoder)
+    else:
+        _cache = nocache()
 
         # _cache = cached(TTLCache(maxsize=maxsize,  ttl=expiration_time))
     return _cache

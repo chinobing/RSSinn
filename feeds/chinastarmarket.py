@@ -19,7 +19,7 @@ description=f"""
 @chinastarmarket.get("/telegraph/",
               summary="科创板电报",
               description=description)
-@cached("chinastarmarket-telegraph")
+@cached()
 async def telegraph():
     url = 'https://www.chinastarmarket.cn/telegraph'
 

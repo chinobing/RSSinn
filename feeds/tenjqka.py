@@ -18,7 +18,7 @@ realtimenews_description=f"""
 @tenjqka.get("/realtimenews/",
               summary="同花顺财经-实时快讯",
               description=realtimenews_description)
-@cached("tenjqka-realtimenews")
+@cached()
 async def realtimenews():
     url = 'https://news.10jqka.com.cn/tapp/news/push/stock/?page=1&tag=&track=website&pagesize=100'
 

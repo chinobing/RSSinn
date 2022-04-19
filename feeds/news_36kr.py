@@ -19,7 +19,7 @@ description=f"""
 @kr.get("/newsflashes/",
               summary="36kr-实时快讯",
               description=description)
-@cached("kr-newsflashes")
+@cached()
 async def newsflashes():
     url = 'https://36kr.com/newsflashes/'
 

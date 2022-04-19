@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Query
 from typing import Optional
 from models.utils import DEFAULT_HEADERS, fetch, filter_keywords, filter_content
+from models.decorator import cached
 from fastapi_rss import RSSFeed, RSSResponse, Item
 
 esnai = APIRouter()
@@ -15,6 +16,7 @@ description=f"""
 """
 
 @esnai.get("/", summary='会计视野论坛', description=description)
+@cached()
 async def bbs_esnai(cat:Optional[int] = Query(None, description="输入子论坛数字，如https://bbs.esnai.com/forum-7-1.html，则输入`7`"),
                     filters=Depends(filter_keywords)):
     url = 'https://bbs.esnai.com/forum-{}-1.html'
