@@ -59,5 +59,59 @@ async def newsflashes():
     return RSSResponse(feed)
 
 
+"""
+-------------------------------------------------
+   Description :     36kr-实时快讯
+   Modified_date：   2022/04/19
+-------------------------------------------------
+"""
+description_latest=f"""
+- 作者： [@chinobing](https://github.com/chinobing/)
+
+- 来源：`https://36kr.com/information/web_news/`
+- 参数：没有
+"""
+@kr.get("/latest/",
+              summary="36kr-资讯",
+              description=description_latest)
+@cached()
+async def latest():
+    url = 'https://36kr.com/information/web_news/'
+
+    fake = Faker()
+    FAKE_HEADERS = {'Host':'36kr.com', 'User-Agent':fake.user_agent()}
+    response = await fetch(url, headers=FAKE_HEADERS)
+    data_text = response.re(r'<script>window.initialState=(.*?)</')[0]
+    str_data = "".join(data_text)
+    json_data = json.loads(str_data)
+
+    itemList = json_data['information']['informationList']['itemList']
+
+    links = []
+    for item in itemList:
+        link = 'https://36kr.com/p/' + str(item['templateMaterial']['itemId'])
+        links.append(link)
+
+    sub_responses = await fetch(links, headers=FAKE_HEADERS)
+    items_list = []
+    for link, sub_re in zip(links,sub_responses):
+        title = sub_re.xpath('//h1[contains(@class,"article-title")]//text()').get()
+        date = sub_re.xpath('//span[contains(@class,"item-time")]//text()').getall()[1]
+        print(date)
+        pub_date = datetime.strptime(date,'%Y-%m-%d %H:%M')
+        content = sub_re.xpath('//div[contains(@class,"articleDetailContent")]/node()').getall()
+        description = "".join(content)
+
+        _item = Item(title=title, link=link, description=description, pub_date=pub_date)
+        items_list.append(_item)
+
+    feed_data = {
+        'title': '36kr-资讯',
+        'link': url,
+        'description': "",
+        'item': items_list,
+    }
+    feed = RSSFeed(**feed_data)
+    return RSSResponse(feed)
 
 
