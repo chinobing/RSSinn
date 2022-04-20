@@ -14,14 +14,17 @@ upptime:
 
 # Set proxy for crawling webpage, fetch_proxy_settings will be overwritten if individual proxy is set.
 fetch_proxy_settings:
-    PROXY_SERVER: ""  # Supports http and socks proxies.
-    PROXY_USERNAME: ""
-    PROXY_PASSWORD: ""
+    simple:
+      proxy_server: ""  # Supports http and socks proxies.
+      proxy_username: ""
+      proxy_password: ""
+    proxy_pool:
+      server: "http://127.0.0.1:5010" #http://127.0.0.1:5010 , https://github.com/jhao104/proxy_pool
 
 # Settings for cache
 related_settings:
     cached:
         enabled: True
-        method: "in-memory" # in-memory or redis
-        redis_url: "redis://localhost" # eg. redis://:password@ip_address:port
-        expiration_time: 300 # Time in seconds for cached feeds to expire after
+        method: "redis" # in-memory or redis
+        redis_url: "redis://:password@ip_address:port" # eg. redis://:password@ip_address:port
+        expiration_time: 30 # Time in seconds for cached feeds to expire after

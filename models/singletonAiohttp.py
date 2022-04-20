@@ -34,12 +34,12 @@ class SingletonAiohttp:
                         ):
         client = cls.get_aiohttp_client()
 
-        if _settings['PROXY_USERNAME'] and _settings['PROXY_PASSWORD']:
-            proxy_auth = aiohttp.BasicAuth(_settings['PROXY_USERNAME'], _settings['PROXY_PASSWORD'])
+        if _settings["proxy_username"] !="":
+            proxy_auth = aiohttp.BasicAuth(_settings['proxy_username'], _settings['proxy_password'])
         else:
             proxy_auth = None
-        if _settings['PROXY_SERVER']:
-            proxy_server = _settings['PROXY_SERVER']
+        if _settings["proxy_server"] !="":
+            proxy_server = _settings['proxy_server']
         else:
             proxy_server = None
         try:

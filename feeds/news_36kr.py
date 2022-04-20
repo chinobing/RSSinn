@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from models.utils import fetch
+from models.proxy_checker import ProxyChecker
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
@@ -92,7 +93,9 @@ async def latest():
         link = 'https://36kr.com/p/' + str(item['templateMaterial']['itemId'])
         links.append(link)
 
-    sub_responses = await fetch(links, headers=FAKE_HEADERS, cache_enabled=True)
+    ip = ProxyChecker.proxy()
+    prxoy = {'proxy_server': ip}
+    sub_responses = await fetch(links, headers=FAKE_HEADERS, cache_enabled=True, proxy=prxoy)
     items_list = []
     for link, sub_re in zip(links,sub_responses):
         title = sub_re.xpath('//h1[contains(@class,"article-title")]//text()').get()

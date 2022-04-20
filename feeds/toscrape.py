@@ -4,6 +4,7 @@ from models.utils import DEFAULT_HEADERS, fetch, filter_keywords, filter_content
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from models.decorator import cached
+from models.proxy_checker import ProxyChecker
 
 toscrape = APIRouter()
 
@@ -129,7 +130,9 @@ async def authors():
     links = tree.xpath("//div[@class='quote']/span/a/@href").getall()
     links = [f'{url}{uri}' for uri in links]
 
-    results = await fetch(links)
+    ip = ProxyChecker.proxy()
+    prxoy = {'proxy_server': ip}
+    results = await fetch(links, cache_enabled=True, proxy=prxoy)
     if not results:
         return
 

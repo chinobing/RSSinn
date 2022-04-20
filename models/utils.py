@@ -11,7 +11,7 @@ from models.browser import Browser
 from models.read_yaml import parsing_yaml
 from models.decorator import fetch_content_cached
 
-fetch_proxy_settings = parsing_yaml()['fetch_proxy_settings']
+simple_proxy_settings = parsing_yaml()['fetch_proxy_settings']['simple']
 
 DEFAULT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
 
@@ -43,7 +43,12 @@ async def fetch(urls: Union[str, List],
         await zombies_process_killer()
 
     if isinstance(proxy, dict):
-        fetch_proxy_settings.update(PROXY_SERVER=proxy['PROXY_SERVER'],PROXY_USERNAME=proxy['PROXY_USERNAME'],PROXY_PASSWORD=proxy['PROXY_PASSWORD'])
+        if "PROXY_SERVER" in proxy:
+            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_server'])
+        if "PROXY_USERNAME" in proxy:
+            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_username'])
+        if "PROXY_PASSWORD" in proxy:
+            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_password'])
 
     @fetch_content_cached(cache_enabled)
     async def query_url(urls, headers, _settings):
@@ -52,7 +57,7 @@ async def fetch(urls: Union[str, List],
     if isinstance(urls, str):
         if fetch_js == True:
             logger = logging.getLogger('browser')
-            browser = Browser(fetch_proxy_settings)
+            browser = Browser(simple_proxy_settings)
             await browser.start(headless=True)
             logger.info("Browser launched.")
 
@@ -68,7 +73,7 @@ async def fetch(urls: Union[str, List],
             logger.info("Browser shutdown.")
         else:
             # res = await SingletonAiohttp.query_url(urls, headers=headers, _settings=fetch_proxy_settings)
-            res = await query_url(urls, headers=headers, _settings=fetch_proxy_settings)
+            res = await query_url(urls, headers=headers, _settings=simple_proxy_settings)
             await SingletonAiohttp.close_aiohttp_client()
 
         if 'ERROR' in res:
@@ -87,7 +92,7 @@ async def fetch(urls: Union[str, List],
                 raise HTTPException(status_code=404, detail="fetch_js does not support multiple urls yet. ")
             else:
                 # async_calls.append(SingletonAiohttp.query_url(url, headers=headers,  _settings=fetch_proxy_settings))
-                async_calls.append(query_url(url, headers=headers, _settings=fetch_proxy_settings))
+                async_calls.append(query_url(url, headers=headers, _settings=simple_proxy_settings))
                 await SingletonAiohttp.close_aiohttp_client()
 
         all_results: List[Tuple] = await asyncio.gather(*async_calls)  # wait for all async operations
