@@ -1,5 +1,3 @@
-# from asyncache import cached
-# from cachetools import TTLCache
 from fastapi_cache.decorator import cache
 from fastapi_cache.coder import PickleCoder
 from models.read_yaml import parsing_yaml
@@ -14,9 +12,18 @@ def nocache(*args, **kwargs):
 
 def cached():
     if cached_settings['enabled'] == True:
-        _cache = cache(namespace="rssinn", expire=expiration_time, coder=PickleCoder)
+        _cache = cache(namespace="feeds", expire=expiration_time, coder=PickleCoder)
     else:
         _cache = nocache()
+    return _cache
 
-        # _cache = cached(TTLCache(maxsize=maxsize,  ttl=expiration_time))
+def fetch_content_cached(fetch_cache_enabled):
+    """
+    cache webpage content by url
+    cache expires in one day
+    """
+    if fetch_cache_enabled == True:
+        _cache = cache(namespace="fetch_content_cached", expire=86400, coder=PickleCoder)
+    else:
+        _cache = nocache()
     return _cache

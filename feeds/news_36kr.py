@@ -92,12 +92,11 @@ async def latest():
         link = 'https://36kr.com/p/' + str(item['templateMaterial']['itemId'])
         links.append(link)
 
-    sub_responses = await fetch(links, headers=FAKE_HEADERS)
+    sub_responses = await fetch(links, headers=FAKE_HEADERS, cache_enabled=True)
     items_list = []
     for link, sub_re in zip(links,sub_responses):
         title = sub_re.xpath('//h1[contains(@class,"article-title")]//text()').get()
         date = sub_re.xpath('//span[contains(@class,"item-time")]//text()').getall()[1]
-        print(date)
         pub_date = datetime.strptime(date,'%Y-%m-%d %H:%M')
         content = sub_re.xpath('//div[contains(@class,"articleDetailContent")]/node()').getall()
         description = "".join(content)

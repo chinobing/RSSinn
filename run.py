@@ -44,14 +44,14 @@ async def startup():
     if cache_setting['enabled'] == True:
         if cache_setting['method'] =='in-memory':
             from fastapi_cache.backends.inmemory import InMemoryBackend
-            FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
+            FastAPICache.init(InMemoryBackend(), prefix="rssinn-cache")
 
         if cache_setting['method'] =='redis':
             import aioredis
             from fastapi_cache.backends.redis import RedisBackend
             redis_url = cache_setting['redis_url']
             redis =  aioredis.from_url(redis_url, encoding="utf8", decode_responses=False)
-            FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+            FastAPICache.init(RedisBackend(redis), prefix="rssinn-cache")
 
 if __name__ == '__main__':
     uvicorn.run('run:app', host='localhost', port=28085, reload=True, debug=True)
