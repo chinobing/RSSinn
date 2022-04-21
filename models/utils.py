@@ -35,15 +35,16 @@ async def fetch(urls: Union[str, List],
     #proxy setup
     if proxy_pool_settings["server"]:
         proxy_ip = ProxyChecker.proxy()
-        simple_proxy_settings.update(PROXY_SERVER=proxy_ip)
+        proxy_server=f"http://{str(proxy_ip)}"
+        simple_proxy_settings.update(proxy_server=proxy_server)
 
     if isinstance(proxy, dict):
         if "proxy_server" in proxy:
-            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_server'])
+            simple_proxy_settings.update(proxy_server=proxy['proxy_server'])
         if "proxy_username" in proxy:
-            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_username'])
+            simple_proxy_settings.update(proxy_username=proxy['proxy_username'])
         if "proxy_password" in proxy:
-            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_password'])
+            simple_proxy_settings.update(proxy_password=proxy['proxy_password'])
 
     # chrome zombies_process_killer
     if checkIfProcessRunning('chrome'):
