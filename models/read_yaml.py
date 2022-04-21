@@ -1,6 +1,8 @@
 import yaml
 import logging
+from pathlib import Path
 from functools import lru_cache
+
 
 @lru_cache()
 def parsing_yaml():
@@ -11,3 +13,6 @@ def parsing_yaml():
             logging.info(exc)
         finally:
             return parsed_yaml
+
+path: Path = Path(__package__).absolute()
+logging.config.dictConfig(yaml.load(Path('./logging_conf.yaml').read_text(), Loader=yaml.FullLoader))

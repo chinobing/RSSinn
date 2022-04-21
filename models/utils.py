@@ -10,50 +10,52 @@ from models.process_killer import checkIfProcessRunning, zombies_process_killer
 from models.browser import Browser
 from models.read_yaml import parsing_yaml
 from models.decorator import fetch_content_cached
+from models.proxy_checker import ProxyChecker
 
-simple_proxy_settings = parsing_yaml()['fetch_proxy_settings']['simple']
+fetch_proxy_settings = parsing_yaml()['fetch_proxy_settings']
+simple_proxy_settings = fetch_proxy_settings['simple']
+proxy_pool_settings = fetch_proxy_settings['proxy_pool']
 
 DEFAULT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
-
-class filter_keywords:
-    """preset params for filtering items from result.
-    """
-    def __init__(self,
-                 include_keywords: Optional[str] = Query(None, description="**包括指定的关键字**，如`a-b-c-d, 则包括a、b、c、d四个关键字`"),
-                 exclude_keywords: Optional[str] = Query(None, description="**不包括指定的关键字**，如`a-b-c-d， 则不包括a、b、c、d四个关键字`"),
-                 ):
-        """
-        Construct a new 'filter_keywords' object.
-
-        :param name: include_keywords, exclude_keywords
-        :return: returns include_keywords, exclude_keywords
-        """
-        self.include_keywords = include_keywords
-        self.exclude_keywords = exclude_keywords
-
 
 async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
                 proxy: Optional[dict] = None,
                 fetch_js:Optional[bool]=None,
                 cache_enabled=False):
+    """
+    :param urls: str
+    :param headers:dict
+    :param proxy: {"proxy_server":"", "proxy_username":"", "proxy_password":""}
+    :param fetch_js: True or False
+    :param cache_enabled:  True or False
+    :return: json or text with Selector
+    """
 
+    #proxy setup
+    if proxy_pool_settings["server"]:
+        proxy_ip = ProxyChecker.proxy()
+        simple_proxy_settings.update(PROXY_SERVER=proxy_ip)
+
+    if isinstance(proxy, dict):
+        if "proxy_server" in proxy:
+            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_server'])
+        if "proxy_username" in proxy:
+            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_username'])
+        if "proxy_password" in proxy:
+            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_password'])
+
+    # chrome zombies_process_killer
     if checkIfProcessRunning('chrome'):
         print('Yes a chrome process was running')
         await zombies_process_killer()
 
-    if isinstance(proxy, dict):
-        if "PROXY_SERVER" in proxy:
-            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_server'])
-        if "PROXY_USERNAME" in proxy:
-            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_username'])
-        if "PROXY_PASSWORD" in proxy:
-            simple_proxy_settings.update(PROXY_SERVER=proxy['proxy_password'])
-
+    # cache setup for fetch
     @fetch_content_cached(cache_enabled)
     async def query_url(urls, headers, _settings):
         return await SingletonAiohttp.query_url(urls, headers, _settings)
 
+    # fetch
     if isinstance(urls, str):
         if fetch_js == True:
             logger = logging.getLogger('browser')
@@ -111,7 +113,10 @@ async def fetch(urls: Union[str, List],
 
 
 def filter_content(items, filters: Optional[dict] = None):
-    """Returns a mapping of member item->item.
+    """
+    :param items:
+    :param filters: filters=Depends(filter_keywords)
+    :return:  a mapping of member item->item.
     This maps all items from a list with customized include_keywords or exclude_keywords.
     Raw data will be returned if filters is not available.
     """
@@ -143,8 +148,30 @@ def filter_content(items, filters: Optional[dict] = None):
     return [dict(t) for t in {tuple(d.items()) for d in content}]
 
 def validateJSON(jsonData):
+    """
+    :param jsonData: json
+    :return: True or False
+    """
     try:
         json.loads(jsonData)
     except ValueError as err:
         return False
     return True
+
+
+class filter_keywords:
+    """preset params for filtering items from result.
+    """
+    def __init__(self,
+                 include_keywords: Optional[str] = Query(None, description="**包括指定的关键字**，如`a-b-c-d, 则包括a、b、c、d四个关键字`"),
+                 exclude_keywords: Optional[str] = Query(None, description="**不包括指定的关键字**，如`a-b-c-d， 则不包括a、b、c、d四个关键字`"),
+                 ):
+        """
+        Construct a new 'filter_keywords' object.
+
+        :param name: include_keywords, exclude_keywords
+        :return: returns include_keywords, exclude_keywords
+        """
+        self.include_keywords = include_keywords
+        self.exclude_keywords = exclude_keywords
+

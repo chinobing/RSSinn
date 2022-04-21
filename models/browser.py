@@ -16,16 +16,16 @@ class Browser:
         if not self._playwright:
             self._playwright = await async_playwright().start()
         if not self._browser:
-            if self._settings and self._settings['PROXY_SERVER'] \
-                    and self._settings['PROXY_USERNAME'] and self._settings['PROXY_PASSWORD']:
+            if self._settings and self._settings['proxy_server'] \
+                    and self._settings['proxy_username'] and self._settings['proxy_password']:
                 self._browser = await self._playwright.chromium.launch_persistent_context(
                     "browser_data/", java_script_enabled=True, args=["--disable-notifications"],
                     proxy={
-                        "server": self._settings['PROXY_SERVER'],
-                        "username": self._settings['PROXY_USERNAME'],
-                        "password": self._settings['PROXY_PASSWORD']},
+                        "server": self._settings['proxy_server'],
+                        "username": self._settings['proxy_username'],
+                        "password": self._settings['proxy_password']},
                     **kwargs)
-                logger.info(f"Browser launched with proxy {self._settings['PROXY_SERVER']}")
+                logger.info(f"Browser launched with proxy {self._settings['proxy_server']}")
             else:
                 self._browser = await self._playwright.chromium.launch_persistent_context(
                     "browser_data/", java_script_enabled=True, args=["--disable-notifications"], **kwargs)
