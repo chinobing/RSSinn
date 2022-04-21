@@ -18,25 +18,44 @@ proxy_pool_settings = fetch_proxy_settings['proxy_pool']
 
 DEFAULT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
 
+class filter_keywords:
+    """preset params for filtering items from result.
+    """
+    def __init__(self,
+                 include_keywords: Optional[str] = Query(None, description="**包括指定的关键字**，如`a-b-c-d, 则包括a、b、c、d四个关键字`"),
+                 exclude_keywords: Optional[str] = Query(None, description="**不包括指定的关键字**，如`a-b-c-d， 则不包括a、b、c、d四个关键字`"),
+                 ):
+        """
+        Construct a new 'filter_keywords' object.
+
+        :param name: include_keywords, exclude_keywords
+        :return: returns include_keywords, exclude_keywords
+        """
+        self.include_keywords = include_keywords
+        self.exclude_keywords = exclude_keywords
+
 async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
                 proxy: Optional[dict] = None,
+                proxy_pool: Optional[bool] = None,
                 fetch_js:Optional[bool]=None,
                 cache_enabled=False):
     """
     :param urls: str
     :param headers:dict
     :param proxy: {"proxy_server":"", "proxy_username":"", "proxy_password":""}
+    :param proxy_pool: True or False
     :param fetch_js: True or False
     :param cache_enabled:  True or False
     :return: json or text with Selector
     """
 
     #proxy setup
-    if proxy_pool_settings["server"]:
-        proxy_ip = ProxyChecker.proxy()
-        proxy_server=f"http://{str(proxy_ip)}"
-        simple_proxy_settings.update(proxy_server=proxy_server)
+    if proxy_pool==True:
+        if proxy_pool_settings["server"]:
+            proxy_ip = ProxyChecker.proxy()
+            proxy_server=f"{str(proxy_ip)}"
+            simple_proxy_settings.update(proxy_server=proxy_server)
 
     if isinstance(proxy, dict):
         if "proxy_server" in proxy:
@@ -158,21 +177,3 @@ def validateJSON(jsonData):
     except ValueError as err:
         return False
     return True
-
-
-class filter_keywords:
-    """preset params for filtering items from result.
-    """
-    def __init__(self,
-                 include_keywords: Optional[str] = Query(None, description="**包括指定的关键字**，如`a-b-c-d, 则包括a、b、c、d四个关键字`"),
-                 exclude_keywords: Optional[str] = Query(None, description="**不包括指定的关键字**，如`a-b-c-d， 则不包括a、b、c、d四个关键字`"),
-                 ):
-        """
-        Construct a new 'filter_keywords' object.
-
-        :param name: include_keywords, exclude_keywords
-        :return: returns include_keywords, exclude_keywords
-        """
-        self.include_keywords = include_keywords
-        self.exclude_keywords = exclude_keywords
-
