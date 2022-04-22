@@ -10,11 +10,9 @@ from models.process_killer import checkIfProcessRunning, zombies_process_killer
 from models.browser import Browser
 from models.read_yaml import parsing_yaml
 from models.decorator import fetch_content_cached
-from models.proxy_checker import ProxyChecker
 
 fetch_proxy_settings = parsing_yaml()['fetch_proxy_settings']
 simple_proxy_settings = fetch_proxy_settings['simple']
-proxy_pool_settings = fetch_proxy_settings['proxy_pool']
 
 DEFAULT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'}
 
@@ -37,26 +35,18 @@ class filter_keywords:
 async def fetch(urls: Union[str, List],
                 headers: dict=DEFAULT_HEADERS,
                 proxy: Optional[dict] = None,
-                proxy_pool: Optional[bool] = None,
                 fetch_js:Optional[bool]=None,
                 cache_enabled=False):
     """
     :param urls: str
     :param headers:dict
     :param proxy: {"proxy_server":"", "proxy_username":"", "proxy_password":""}
-    :param proxy_pool: True or False
     :param fetch_js: True or False
     :param cache_enabled:  True or False
     :return: json or text with Selector
     """
 
     #proxy setup
-    if proxy_pool==True:
-        if proxy_pool_settings["server"]:
-            proxy_ip = ProxyChecker.proxy()
-            proxy_server=f"{str(proxy_ip)}"
-            simple_proxy_settings.update(proxy_server=proxy_server)
-
     if isinstance(proxy, dict):
         if "proxy_server" in proxy:
             simple_proxy_settings.update(proxy_server=proxy['proxy_server'])

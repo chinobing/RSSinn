@@ -80,7 +80,7 @@ async def latest():
 
     fake = Faker()
     FAKE_HEADERS = {'Host':'36kr.com', 'User-Agent':fake.user_agent()}
-    response = await fetch(url, headers=FAKE_HEADERS)
+    response = await fetch(url, headers=FAKE_HEADERS, cache_enabled=True)
     data_text = response.re(r'<script>window.initialState=(.*?)</')[0]
     str_data = "".join(data_text)
     json_data = json.loads(str_data)
@@ -92,7 +92,7 @@ async def latest():
         link = 'https://36kr.com/p/' + str(item['templateMaterial']['itemId'])
         links.append(link)
 
-    sub_responses = await fetch(links, headers=FAKE_HEADERS, cache_enabled=True, proxy_pool=True)
+    sub_responses = await fetch(links, headers=FAKE_HEADERS, cache_enabled=True)
     items_list = []
     for link, sub_re in zip(links,sub_responses):
         title = sub_re.xpath('//h1[contains(@class,"article-title")]//text()').get()

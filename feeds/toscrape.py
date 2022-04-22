@@ -129,7 +129,7 @@ async def authors():
     links = tree.xpath("//div[@class='quote']/span/a/@href").getall()
     links = [f'{url}{uri}' for uri in links]
 
-    results = await fetch(links, cache_enabled=True, proxy_pool=True)
+    results = await fetch(links, headers=DEFAULT_HEADERS, cache_enabled=True)
     if not results:
         return
 

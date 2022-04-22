@@ -1,8 +1,8 @@
 import logging
 import requests
 from models.read_yaml import parsing_yaml
-proxy_pool_address = parsing_yaml()['fetch_proxy_settings']['proxy_pool']['server']
-
+# proxy_pool_address = parsing_yaml()['fetch_proxy_settings']['proxy_pool']['server']
+proxy_pool_address = ""
 
 
 class ProxyChecker:

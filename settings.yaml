@@ -18,8 +18,6 @@ fetch_proxy_settings:
       proxy_server: ""  # Supports http and socks proxies.
       proxy_username: ""
       proxy_password: ""
-    proxy_pool:
-      server: "http://127.0.0.1:5010" #http://127.0.0.1:5010 , https://github.com/jhao104/proxy_pool
 
 # Settings for cache
 related_settings:
