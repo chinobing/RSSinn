@@ -80,7 +80,7 @@ async def latest():
 
     fake = Faker()
     FAKE_HEADERS = {'Host':'36kr.com', 'User-Agent':fake.user_agent()}
-    response = await fetch(url, headers=FAKE_HEADERS, cache_enabled=True)
+    response = await fetch(url, headers=FAKE_HEADERS)
     data_text = response.re(r'<script>window.initialState=(.*?)</')[0]
     str_data = "".join(data_text)
     json_data = json.loads(str_data)
