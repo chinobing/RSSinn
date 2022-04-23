@@ -61,11 +61,10 @@ async def fudao(kw:Optional[str]=None):
                 "qingdao": "0aac3a415f4248539364ad7a8aa63600",
                 }
 
-    url = f'http://www.csrc.gov.cn/searchList/{province[kw]}?_isAgg=false&_isJson=true&_pageSize=18&_template=index&_rangeTimeGte=&_channelName=&page=1'
-
-    if kw is None:
+    if kw is None or kw not in province:
         raise HTTPException(status_code=404, detail="请填写正确的【省/城市】对应的拼音")
     if kw in province:
+        url = f'http://www.csrc.gov.cn/searchList/{province[kw]}?_isAgg=false&_isJson=true&_pageSize=18&_template=index&_rangeTimeGte=&_channelName=&page=1'
         str_data = await fetch(url)
         json_data = json.loads(str_data)
         data = json_data['data']['results']
@@ -75,7 +74,12 @@ async def fudao(kw:Optional[str]=None):
             link = item['url']
             ctime = int(item['publishedTime'])/1000
             pub_date = datetime.fromtimestamp(ctime)
-            description = f"<a href=http://www.csrc.gov.cn{item['resList'][0]['filePath']}>{item['resList'][0]['fileName']}</a>"
+            if item['resList']:
+                fileName = item['resList'][0]['fileName']
+                filePath = item['resList'][0]['filePath']
+                description = f"<a href=http://www.csrc.gov.cn{filePath}>{fileName}</a>"
+            else:
+                description = item['subTitle']
 
             _item = Item(title=title, link=link, description=description, pub_date=pub_date)
             items_list.append(_item)
