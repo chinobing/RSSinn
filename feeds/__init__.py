@@ -6,3 +6,4 @@ from .news_36kr import kr
 from .xl720 import xl720
 from .tenjqka import tenjqka
 from .yyets import yyets
+from .csrc import csrc
