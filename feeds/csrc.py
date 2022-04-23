@@ -19,7 +19,7 @@ fudao_description=f"""
 - 来源：`http://www.csrc.gov.cn/`
 - 参数：没有
 """
-@csrc.get("/fudao/",
+@csrc.get("/fudao",
             summary="证监会 - 辅导企业基本情况",
             description=fudao_description)
 async def fudao(kw:Optional[str]=None):
