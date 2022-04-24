@@ -4,8 +4,8 @@ from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
 from models.decorator import cached
+from models.proxy_checker import ProxyChecker
 import json
-
 kr = APIRouter()
 
 """
@@ -74,12 +74,13 @@ description_latest=f"""
 @kr.get("/latest/",
               summary="36kr-资讯",
               description=description_latest)
-@cached()
+# @cached()
 async def latest():
     url = 'https://36kr.com/information/web_news/'
 
     fake = Faker()
     FAKE_HEADERS = {'Host':'36kr.com', 'User-Agent':fake.user_agent()}
+
 
     response = await fetch(url, headers=FAKE_HEADERS)
     data_text = response.re(r'<script>window.initialState=(.*?)</')[0]

@@ -23,12 +23,12 @@ def custom_key_builder(
     make cache remain unchanged even with headers and _settings params
     """
     prefix = f"{FastAPICache.get_prefix()}:{namespace}:"
-    kwargs.update(headers="", _settings="")
+    # kwargs.update(headers="", _settings="")
     cache_key = (
             prefix
             + hashlib.md5(  # nosec:B303
-        f"{func.__module__}:{func.__name__}:{args}:{kwargs}".encode()
-        # f"{func.__module__}:{func.__name__}:{args}".encode()
+        # f"{func.__module__}:{func.__name__}:{args}:{kwargs}".encode()
+        f"{func.__module__}:{func.__name__}:{args}".encode()
     ).hexdigest()
     )
     return cache_key

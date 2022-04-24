@@ -49,7 +49,5 @@ class SingletonAiohttp:
                     raise HTTPException(status_code=response.status, detail="Item not found, please try again!")
                 text_result = await response.text()
         except Exception as e:
-            raise HTTPException(status_code=404, detail="Item not found, please try again!")
-            return {"ERROR": e}
-
+            return "ERROR"
         return text_result

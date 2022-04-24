@@ -63,7 +63,11 @@ async def fetch(urls: Union[str, List],
     # cache setup for fetch
     @fetch_content_cached(cache_enabled)
     async def query_url(urls, headers, _settings):
-        return await SingletonAiohttp.query_url(urls, headers, _settings)
+        ret = await SingletonAiohttp.query_url(urls, headers, _settings)
+        if "ERROR" in ret or ret is None:
+            return "ERROR"
+            # raise HTTPException(status=500)
+        return ret
 
     # fetch
     if isinstance(urls, str):
