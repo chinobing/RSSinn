@@ -22,10 +22,11 @@ class ProxyChecker:
         try:
             cls.logger.info('get proxy ...')
             ip = {"http": "http://" + proxy, "https": "https://" + proxy}
+            # ip = {"http": "http://" + proxy}
             r = requests.get(url, proxies=ip, headers=headers, timeout=1)
             cls.logger.info(r.status_code)
             if r.status_code == 200:
-                return proxy
+                return f"http://{proxy}"
         except:
             cls.logger.info('get proxy again ...')
             return cls.proxy()

@@ -12,7 +12,7 @@ kr = APIRouter()
 """
 -------------------------------------------------
    Description :     36kr-实时快讯
-   Modified_date：   2022/04/19
+   Modified at ：     2022/04/19
 -------------------------------------------------
 """
 description=f"""
@@ -83,13 +83,14 @@ async def latest():
     FAKE_HEADERS = {'Host':'36kr.com', 'User-Agent':fake.user_agent()}
 
     proxy = ProxyChecker.proxy(url)
+
     response = await fetch(url, headers=FAKE_HEADERS, proxy={"proxy_server": proxy})
     data_text = response.re(r'<script>window.initialState=(.*?)</')[0]
     str_data = "".join(data_text)
     json_data = json.loads(str_data)
 
     itemList = json_data['information']['informationList']['itemList']
-    print(itemList)
+
     links = []
     for item in itemList:
         link = 'https://36kr.com/p/' + str(item['itemId'])
