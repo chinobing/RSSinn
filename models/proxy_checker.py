@@ -3,19 +3,19 @@ import requests
 from typing import Optional
 from freeproxy import freeproxy
 
-fp_client = freeproxy.FreeProxy()
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
-}
 
 class ProxyChecker:
     logger = logging.getLogger(__name__)
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
+    }
+    fp_client = freeproxy.FreeProxy()
 
     @classmethod
     def proxy(cls,
               url: Optional[str]=None):
-        proxy = list(fp_client.getrandomproxy().values())[0]
+
+        proxy = list(cls.fp_client.getrandomproxy().values())[0]
 
         if url is None:
             url = "http://www.baidu.com"
@@ -23,7 +23,7 @@ class ProxyChecker:
             cls.logger.info('get proxy ...')
             ip = {"http": "http://" + proxy, "https": "https://" + proxy}
             # ip = {"http": "http://" + proxy}
-            r = requests.get(url, proxies=ip, headers=headers, timeout=1)
+            r = requests.get(url, proxies=ip, headers=cls.headers, timeout=1)
             cls.logger.info(r.status_code)
             if r.status_code == 200:
                 return f"http://{proxy}"
