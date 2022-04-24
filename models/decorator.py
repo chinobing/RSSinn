@@ -48,10 +48,10 @@ def cached():
 def fetch_content_cached(fetch_cache_enabled):
     """
     cache webpage content by url
-    cache expires in one day
+    cache expires in three day
     """
     if fetch_cache_enabled == True:
-        _cache = cache(namespace="fetch_content_cached", expire=86400, coder=PickleCoder, key_builder=custom_key_builder)
+        _cache = cache(namespace="fetch_content_cached", expire=259200, coder=PickleCoder, key_builder=custom_key_builder)
     else:
         _cache = nocache()
     return _cache
