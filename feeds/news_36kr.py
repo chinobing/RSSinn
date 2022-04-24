@@ -63,7 +63,7 @@ async def newsflashes():
 """
 -------------------------------------------------
    Description :     36kr-实时快讯
-   Modified_date：   2022/04/19
+   Modified at ：     2022/04/24
 -------------------------------------------------
 """
 description_latest=f"""
