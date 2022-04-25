@@ -42,13 +42,14 @@ async def fudao(kw:Optional[str]=None):
         record = []
         trs = tr.xpath(".//td")
         onclick = tr.xpath(".//@onclick").get().split(',')
+        print(onclick)
         pdf_link = f"http://eid.csrc.gov.cn/{onclick[0][14:-1]}"
         pdf_title = tr.xpath(".//@title").get()
         for each in trs[1:]:
             text = each.xpath("normalize-space(.//text())").get()
             record.append(text)
-
-        title = f"[{record[3]}]{record[0]}"
+        _title = record[0] if record[0] else pdf_title
+        title = f"[{record[3]}]{_title}"
         date = record[2]
         pub_date = datetime.strptime(date, '%Y-%m-%d')
 
