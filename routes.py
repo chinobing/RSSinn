@@ -9,7 +9,7 @@ router.include_router(status)
 router.include_router(sitemap)
 
 """金融|Finance"""
-router.include_router(csrc, prefix='/csrc', tags = ['金融|Finance"'])
+router.include_router(csrc, prefix='/csrc', tags = ['金融|Finance'])
 
 """媒体|Media"""
 router.include_router(bridgewater, prefix='/bridgewater', tags = ['媒体 | Media'])
