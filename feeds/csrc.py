@@ -42,7 +42,6 @@ async def fudao(kw:Optional[str]=None):
         record = []
         trs = tr.xpath(".//td")
         onclick = tr.xpath(".//@onclick").get().split(',')
-        print(onclick)
         pdf_link = f"http://eid.csrc.gov.cn/{onclick[0][14:-1]}"
         pdf_title = tr.xpath(".//@title").get()
         for each in trs[1:]:
