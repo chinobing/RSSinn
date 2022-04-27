@@ -139,7 +139,7 @@ def filter_content(items, filters: Optional[dict] = None):
 
     content = []
     for item in items:
-        item_content = ''.join(str(x) for x in item.values())
+        item_content = ''.join(str(x) for x in item)
 
         if filters.include_keywords:
             include_keywords = filters.include_keywords
@@ -159,7 +159,7 @@ def filter_content(items, filters: Optional[dict] = None):
             if not any(x in item_content for x in ex_kws):
                 content.append(item)
 
-    return [dict(t) for t in {tuple(d.items()) for d in content}]
+    return content
 
 def validateJSON(jsonData):
     """
