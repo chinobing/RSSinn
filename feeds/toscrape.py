@@ -101,9 +101,10 @@ async def quotes_with_filter(filters=Depends(filter_keywords)):
     items_list = []
     for _item in items:
         item = Item(title=_item['author'], author=_item['author'], description=_item['description'])
-        items_list.append(item)
+        _filter = filter_content(item, filters)
+        if _filter:
+            items_list.append(item)
 
-    items_list = filter_content(items_list,filters)
     feed_data = {
         'title': 'toscrape with content filter',
         'link': 'toscrape.com',

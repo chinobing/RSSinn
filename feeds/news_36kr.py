@@ -103,7 +103,9 @@ async def latest(filters=Depends(filter_keywords)):
         description = "".join(content)
 
         _item = Item(title=title, link=link, description=description, pub_date=pub_date)
-        items_list.append(_item)
+        _filter = filter_content(_item, filters)
+        if _filter:
+            items_list.append(_item)
 
     items_list = filter_content(items_list, filters)
     feed_data = {

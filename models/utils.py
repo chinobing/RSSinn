@@ -126,7 +126,7 @@ async def fetch(urls: Union[str, List],
         return trees
 
 
-def filter_content(items, filters: Optional[dict] = None):
+def filter_content(item, filters: Optional[dict] = None):
     """
     :param items:
     :param filters: filters=Depends(filter_keywords)
@@ -135,31 +135,30 @@ def filter_content(items, filters: Optional[dict] = None):
     Raw data will be returned if filters is not available.
     """
     if not filters.include_keywords and not filters.exclude_keywords:
-        return items
+        return True
 
-    content = []
-    for item in items:
-        item_content = ''.join(str(x) for x in item)
+    item_content = ''.join(str(x) for x in item)
 
-        if filters.include_keywords:
-            include_keywords = filters.include_keywords
-            if '-' in include_keywords:
-                in_kws = [inkw.strip() for inkw in include_keywords.split('-')]
-            else:
-                in_kws = [include_keywords]
-            if any(x in item_content for x in in_kws):
-                content.append(item)
+    if filters.include_keywords:
+        include_keywords = filters.include_keywords
+        if '-' in include_keywords:
+            in_kws = [inkw.strip() for inkw in include_keywords.split('-')]
+        else:
+            in_kws = [include_keywords]
+        if any(x in item_content for x in in_kws):
+            return True
 
-        if filters.exclude_keywords:
-            exclude_keywords = filters.exclude_keywords
-            if '-' in exclude_keywords:
-                ex_kws = [exkw.strip() for exkw in exclude_keywords.split('-')]
-            else:
-                ex_kws = [exclude_keywords]
-            if not any(x in item_content for x in ex_kws):
-                content.append(item)
+    if filters.exclude_keywords:
+        exclude_keywords = filters.exclude_keywords
+        if '-' in exclude_keywords:
+            ex_kws = [exkw.strip() for exkw in exclude_keywords.split('-')]
+        else:
+            ex_kws = [exclude_keywords]
+        if not any(x in item_content for x in ex_kws):
+            return True
 
-    return content
+    return False
+
 
 def validateJSON(jsonData):
     """
