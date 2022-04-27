@@ -107,7 +107,6 @@ async def latest(filters=Depends(filter_keywords)):
         if _filter:
             items_list.append(_item)
 
-    items_list = filter_content(items_list, filters)
     feed_data = {
         'title': '36kr-资讯',
         'link': url,
