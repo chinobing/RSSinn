@@ -4,6 +4,7 @@ from fastapi_rss import RSSFeed, RSSResponse, Item
 from typing import Optional
 from datetime import datetime
 import json
+import random
 
 stock_exchange = APIRouter()
 
@@ -28,7 +29,8 @@ async def szse_ipo(id:Optional[int]= None):
     if id is None or not id:
         id = 1001583
 
-    url = f"http://listing.szse.cn/api/ras/projectrends/details?id={id}"
+    r = random.random()
+    url = f"http://listing.szse.cn/api/ras/projectrends/details?id={id}&r={r}"
     link = f"http://listing.szse.cn/projectdynamic/ipo/detail/index.html?id={id}"
 
     response= await fetch(url)
@@ -46,7 +48,7 @@ async def szse_ipo(id:Optional[int]= None):
                   f"会计师事务所：{itemList['acctfm']}<br>" \
                   f"募集金额：{itemList['maramt']}亿元<br>" \
 
-    _item = Item(title=title, link=link, description=description, pub_date=pub_date)
+    _item = Item(title=title, description=description, pub_date=pub_date)
 
     feed_data = {
         'title': f"证监会 - {itemList['cmpnm']}-IPO项目动态",
