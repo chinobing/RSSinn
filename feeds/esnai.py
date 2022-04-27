@@ -42,11 +42,12 @@ async def bbs_esnai(cat:Optional[int] = Query(None, description="输入子论坛
     tree = await fetch(link, headers=DEFAULT_HEADERS)
     posts = tree.xpath("//tbody[contains(@id,'normalthread')]")
     items = list(map(parse, posts))
-    items = filter_content(items,filters)
     items_list = []
     for _item in items:
         item = Item(title=_item['title'], link=_item['link'], author=_item['author'])
-        items_list.append(item)
+        _filter = filter_content(item, filters)
+        if _filter:
+            items_list.append(item)
 
     feed_data = {
         'title': '中国会计视野论坛',
