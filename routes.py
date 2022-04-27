@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pages import index, status, sitemap
-from feeds import toscrape, bridgewater, chinastarmarket, esnai, kr, xl720, tenjqka, yyets, csrc
+from feeds import toscrape, bridgewater, chinastarmarket, esnai, kr, xl720, tenjqka, yyets, csrc, stock_exchange
 
 router = APIRouter()
 """RSSINN|Routes"""
@@ -10,6 +10,7 @@ router.include_router(sitemap)
 
 """金融|Finance"""
 router.include_router(csrc, prefix='/csrc', tags = ['金融|Finance'])
+router.include_router(stock_exchange, prefix='', tags = ['金融|Finance'])
 
 """媒体|Media"""
 router.include_router(bridgewater, prefix='/bridgewater', tags = ['媒体 | Media'])
