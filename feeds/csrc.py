@@ -16,7 +16,7 @@ csrc = APIRouter()
 fudao_description=f"""
 - 作者： [@chinobing](https://github.com/chinobing/)
 
-- 来源：`http://www.csrc.gov.cn/`
+- 来源：`http://eid.csrc.gov.cn/102510/`
 - 参数：**kw**, 包括: 北京、天津、河北、山西、内蒙古、辽宁、吉林、黑龙江、上海、江苏、浙江、安徽、福建、江西、山东、河南、湖北、湖南、广东、广西、海南、重庆、四川、贵州、云南、西藏、陕西、甘肃、青海、宁夏、新疆、深圳、大连、宁波、厦门、青岛
 - 路由： `/csrc/?fudao=[]`， 如`/csrc/?fudao=深圳`
 """
@@ -62,7 +62,7 @@ async def fudao(kw:Optional[str]=None):
 
     feed_data = {
         'title': f'证监会 - {kw}辅导企业基本情况',
-        'link': url,
+        'link': "http://eid.csrc.gov.cn/102510/",
         'description': "",
         'item': items_list,
     }

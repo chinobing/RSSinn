@@ -97,13 +97,13 @@ async def quotes_with_filter(filters=Depends(filter_keywords)):
     tree = await fetch(url, headers=DEFAULT_HEADERS)
     posts = tree.xpath("//div[@class='quote']")
     items = list(map(parse, posts))
-    items = filter_content(items,filters)
 
     items_list = []
     for _item in items:
         item = Item(title=_item['author'], author=_item['author'], description=_item['description'])
         items_list.append(item)
 
+    items_list = filter_content(items_list,filters)
     feed_data = {
         'title': 'toscrape with content filter',
         'link': 'toscrape.com',

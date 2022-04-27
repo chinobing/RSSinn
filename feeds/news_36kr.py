@@ -1,11 +1,11 @@
-from fastapi import APIRouter
-from models.utils import fetch
+from fastapi import APIRouter, Depends
+from models.utils import fetch, filter_keywords, filter_content
 from fastapi_rss import RSSFeed, RSSResponse, Item
 from faker import Faker
 from datetime import datetime
 from models.decorator import cached
-from models.proxy_checker import ProxyChecker
 import json
+
 kr = APIRouter()
 
 """
@@ -71,22 +71,20 @@ description_latest=f"""
 - 来源：`https://36kr.com/information/web_news/`
 - 参数：没有
 """
-@kr.get("/latest/",
+@kr.get("/latest",
               summary="36kr-资讯",
               description=description_latest)
 # @cached()
-async def latest():
+async def latest(filters=Depends(filter_keywords)):
     url = 'https://36kr.com/information/web_news/'
 
     fake = Faker()
     FAKE_HEADERS = {'Host':'36kr.com', 'User-Agent':fake.user_agent()}
 
-
     response = await fetch(url, headers=FAKE_HEADERS)
     data_text = response.re(r'<script>window.initialState=(.*?)</')[0]
     str_data = "".join(data_text)
     json_data = json.loads(str_data)
-
     itemList = json_data['information']['informationList']['itemList']
 
     links = []
@@ -96,8 +94,9 @@ async def latest():
 
     sub_responses = await fetch(links, headers=FAKE_HEADERS, cache_enabled=True)
     items_list = []
-    for link, sub_re in zip(links,sub_responses):
+    for sub_re in sub_responses:
         title = sub_re.xpath('//h1[contains(@class,"article-title")]//text()').get()
+        link = sub_re.xpath('//meta[@name="og:url"]/@content').get()
         date = sub_re.xpath('//span[contains(@class,"item-time")]//text()').getall()[1]
         pub_date = datetime.strptime(date,'%Y-%m-%d %H:%M')
         content = sub_re.xpath('//div[contains(@class,"articleDetailContent")]/node()').getall()
@@ -106,6 +105,7 @@ async def latest():
         _item = Item(title=title, link=link, description=description, pub_date=pub_date)
         items_list.append(_item)
 
+    items_list = filter_content(items_list, filters)
     feed_data = {
         'title': '36kr-资讯',
         'link': url,
