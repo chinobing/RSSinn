@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from pages import index, status, sitemap
+from pages import index, status, sitemap, detail
 from feeds import toscrape, bridgewater, chinastarmarket, esnai, kr, xl720, tenjqka, yyets, csrc, stock_exchange
 
 router = APIRouter()
@@ -7,6 +7,7 @@ router = APIRouter()
 router.include_router(index)
 router.include_router(status)
 router.include_router(sitemap)
+router.include_router(detail)
 
 """金融|Finance"""
 router.include_router(csrc, prefix='/csrc', tags = ['金融|Finance'])
