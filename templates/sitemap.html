@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RSSinn - RSS小黑屋</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+</head>
+<body>
+    <div style="text-align: center;">
+        <h1> RSSinn</h1>
+        <details open style="text-align: left;">
+            <summary style="">RSS Feed Basic Information</summary>
+            <p style="">路由地址：<a href="{{ data['path'] }}" target="_blank">{{ data['path'] }}</a></p>
+            <p style="">路由描述：{{ data['description']|safe }}</p>
+        </details>
+
+        <div><a href="/"><button type="button">Home</button></a></div>
+    </div>
+    <footer style="text-align: center;"> ©2022 RSSINN.COM | Designed and built with all the ❤ and 😁 by Chinobing. </footer>
+</body>
+</html>
