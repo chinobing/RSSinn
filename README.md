@@ -1,4 +1,4 @@
-# RSSinn
+# 介绍
 RSSinn是一个基于python FastAPI 的RSS生成器。 利用了FastAPI 自动生成交互式文档、支持 asyncio等特点， 减少了手动创建文档的工作量。
 
 ## 功能说明
