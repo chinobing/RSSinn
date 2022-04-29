@@ -199,7 +199,7 @@ fuser -n tcp -k 28085
 ```
 
 注：
-1. **requires  Python 3.7 or higher.**
+1. **requires  Python 3.8**
 
 
 ## Docker 部署
