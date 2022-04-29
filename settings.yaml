@@ -15,7 +15,7 @@ upptime:
 # Set proxy for crawling webpage, fetch_proxy_settings will be overwritten if individual proxy is set.
 fetch_proxy_settings:
     simple:
-      proxy_server: ""  # Supports http and socks proxies.
+      proxy_server: ""  # Supports http proxy.
       proxy_username: ""
       proxy_password: ""
 
