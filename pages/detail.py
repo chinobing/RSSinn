@@ -15,10 +15,15 @@ async def detail_page(request: Request, path:str):
         for route in request.app.routes:
             if path in route.path and isinstance(route, APIRoute):
                 data['path'] = f"{request.base_url}{route.path[1:]}"
+                data['summary'] = route.summary
+                data['tags'] = route.tags
                 data['description'] = markdown.markdown(route.description)
-
+                data['keywords'] = route.summary.replace('-',', ')
                 return templates.TemplateResponse("detail.html", {"request": request, "data": data})
 
     data['path'] = "N/A"
+    data['summary'] = "detail"
+    data['tags'] = "N/A"
     data['description'] = "N/A"
+    data['keywords'] = "N/A"
     return templates.TemplateResponse("detail.html", {"request": request, "data": data})

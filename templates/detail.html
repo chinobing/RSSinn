@@ -2,15 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>RSSinn - RSS小黑屋</title>
+    <title>{{ data['summary'] }} - RSSinn小黑屋</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta data-rh="true" name="keywords" content="{{ data['keywords'] }}">
+    <meta data-rh="true" name="description" content="This is {{ data['summary'] }} RSS feed generator. 这是{{ data['summary'] }} RSS feed生成器">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 </head>
 <body>
     <div style="text-align: center;">
         <h1> RSSinn</h1>
         <details open style="text-align: left;">
-            <summary style="">RSS Feed Basic Information</summary>
+            <summary style="">RSS Feed Details  </summary>
+            <p style="">路由名称：{{ data['summary'] }}</p>
+            <p style="">路由类别：{{ data['tags'] }}</p>
             <p style="">路由地址：<a href="{{ data['path'] }}" target="_blank">{{ data['path'] }}</a></p>
+
             <p style="">路由描述：{{ data['description']|safe }}</p>
         </details>
 
