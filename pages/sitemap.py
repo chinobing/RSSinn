@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
+from models.read_yaml import parsing_yaml
 from datetime import datetime
 
 sitemap = APIRouter()
 templates = Jinja2Templates(directory='./templates')
+site_settings = parsing_yaml()['site_settings']
+
 
 @sitemap.get("/sitemap", include_in_schema=False)
 async def sitemap_page(request: Request):
@@ -14,7 +17,7 @@ async def sitemap_page(request: Request):
             if route.name is not None:
                 all_routes.append(f"detail{route.path}")
     data = {}
-    data['base_url'] = request.base_url
+    data['base_url'] = site_settings["base_url"]
     data['lastmod'] = datetime.today().strftime("%Y-%m-%d")
     data['routes'] = all_routes
 
