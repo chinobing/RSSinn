@@ -15,12 +15,11 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
             cd ${{ secrets.PROJECT_PATH }}
+            export PATH=/root/.local/bin:$PATH
             git fetch ${{secrets.REPO_URL}}
             git reset --hard
             git pull ${{secrets.REPO_URL}}
             sed -i 's~_redis_url_~${{ secrets.REDIS_URL }}~g' settings.yaml
-          run: |
             fuser -n tcp -k 28085
             fuser -n tcp -k 28085
-            export PATH=/root/.local/bin:$PATH
             nohup pdm run uvicorn run:app --host 0.0.0.0 --port 28085 > log.txt 2>&1 &
