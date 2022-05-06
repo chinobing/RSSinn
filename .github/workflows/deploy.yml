@@ -6,9 +6,10 @@ jobs:
   deploy:
     runs-on: ubuntu-20.04
     steps:
+      - name: settings for rssinn
+        env:
+          REDIS_URL: ${{ secrets.REDIS_URL }}
       - name: Deploy to VPS
-      # don't run locally
-        if: ${{ !env.ACT }}
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.LIVE_SERVER_IP }}
