@@ -6,9 +6,6 @@ jobs:
   deploy:
     runs-on: ubuntu-20.04
     steps:
-      - name: settings for redis
-        run: |
-          sed -i 's~redis_url~${{ secrets.REDIS_URL }}~g' settings.yaml
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
@@ -19,6 +16,7 @@ jobs:
           script: |
             cd ${{ secrets.PROJECT_PATH }}
             git pull ${{secrets.REPO_URL}}
+            sed -i 's~redis_url~${{ secrets.REDIS_URL }}~g' settings.yaml
             fuser -n tcp -k 28085
             fuser -n tcp -k 28085
             export PATH=/root/.local/bin:$PATH
