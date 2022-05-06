@@ -6,10 +6,9 @@ jobs:
   deploy:
     runs-on: ubuntu-20.04
     steps:
-      - name: settings for rssinn
-        uses: actions/checkout@v2
-        env:
-          REDIS_URL: ${{ secrets.REDIS_URL }}
+      - name: settings for redis
+        run: |
+          sed -i 's/redis_url/${{ secrets.REDIS_URL }}/g' setting.yaml
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
