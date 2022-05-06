@@ -19,6 +19,7 @@ jobs:
             git reset --hard
             git pull ${{secrets.REPO_URL}}
             sed -i 's~_redis_url_~${{ secrets.REDIS_URL }}~g' settings.yaml
+          run: |
             fuser -n tcp -k 28085
             fuser -n tcp -k 28085
             export PATH=/root/.local/bin:$PATH
