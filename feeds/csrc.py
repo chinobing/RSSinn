@@ -41,8 +41,12 @@ async def fudao(kw:Optional[str]=None):
     for tr in table_tr[1:]:
         record = []
         trs = tr.xpath(".//td")
-        onclick = tr.xpath(".//@onclick").get().split(',')
-        pdf_link = f"http://eid.csrc.gov.cn/{onclick[0][14:-1]}"
+        onclick = tr.xpath(".//@onclick").get()
+        if onclick:
+            onclick = onclick.split(',')
+            pdf_link = f"http://eid.csrc.gov.cn/{onclick[0][14:-1]}"
+        else:
+            pdf_link = ""
         pdf_title = tr.xpath(".//@title").get()
         for each in trs[1:]:
             text = each.xpath("normalize-space(.//text())").get()
