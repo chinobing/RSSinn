@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: settings for redis
         run: |
-          sed -i 's/redis_url/${{ secrets.REDIS_URL }}/g' setting.yaml
+          sed -i 's/redis_url/${{ secrets.REDIS_URL }}/g' settings.yaml
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
