@@ -22,5 +22,4 @@ jobs:
             fuser -n tcp -k 28085
             fuser -n tcp -k 28085
             export PATH=/root/.local/bin:$PATH
-            pdm init
             nohup pdm run uvicorn run:app --host 0.0.0.0 --port 28085 > log.txt 2>&1 &
