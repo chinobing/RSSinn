@@ -15,6 +15,8 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
             cd ${{ secrets.PROJECT_PATH }}
+            git fetch --all
+            git reset --hard origin/master 
             git pull ${{secrets.REPO_URL}}
             sed -i 's~_redis_url_~${{ secrets.REDIS_URL }}~g' settings.yaml
             fuser -n tcp -k 28085
