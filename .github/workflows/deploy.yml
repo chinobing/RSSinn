@@ -16,7 +16,7 @@ jobs:
           script: |
             cd ${{ secrets.PROJECT_PATH }}
             git pull ${{secrets.REPO_URL}}
-            sed -i 's~redis_url~${{ secrets.REDIS_URL }}~g' settings.yaml
+            sed -i 's~_redis_url_~${{ secrets.REDIS_URL }}~g' settings.yaml
             fuser -n tcp -k 28085
             fuser -n tcp -k 28085
             export PATH=/root/.local/bin:$PATH
