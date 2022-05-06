@@ -5,6 +5,9 @@ app_setting:
      description: "Powered by FastAPI"
      swagger_ui_parameters: {defaultModelsExpandDepth: -1, filter: True}
 
+site_settings:
+     base_url: "https://www.rssinn.com/"
+
 # Upptime (https://upptime.js.org) is the open-source uptime monitor and status page, powered entirely by GitHub Actions, https://github.com/upptime/upptime
 upptime:
      enabled: True
