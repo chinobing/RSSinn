@@ -15,7 +15,7 @@ url = 'https://quotes.toscrape.com/'
    Modified_date：   2022/04/19
 -------------------------------------------------
 """
-@toscrape.get("/quotes/",
+@toscrape.get("/quotes",
               summary="获取首页所有quotes",
               description="直接输入网址获取首页所有quotes")
 async def quotes():
@@ -46,7 +46,7 @@ async def quotes():
    Modified_date：   2022/04/19
 -------------------------------------------------
 """
-@toscrape.get("/quotes_tag/",
+@toscrape.get("/quotes_tag",
               summary="获取带指定tag的所有quotes",
               description="输入指定的tag获取quotes")
 async def quotes_tag(tag:Optional[str] = None):
@@ -84,7 +84,7 @@ async def quotes_tag(tag:Optional[str] = None):
    Modified_date：   2022/04/19
 -------------------------------------------------
 """
-@toscrape.get("/quotes_with_filter/",
+@toscrape.get("/quotes_with_filter",
               summary="获取带指定关键字的所有quotes",
               description="`inculde_keywords`：包含指定的关键字；`exclude_keywords`：不含指定关键字；")
 async def quotes_with_filter(filters=Depends(filter_keywords)):
@@ -120,7 +120,7 @@ async def quotes_with_filter(filters=Depends(filter_keywords)):
    Modified_date：   2022/04/19
 -------------------------------------------------
 """
-@toscrape.get("/authors/", summary='关于作者介绍',
+@toscrape.get("/authors", summary='关于作者介绍',
               description='获取次页面的数据，并使用了cache来缓存结果')
 @cached()
 async def authors():

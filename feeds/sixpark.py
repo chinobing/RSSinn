@@ -25,7 +25,6 @@ async def search(kw):
 
     tree = await fetch(url)
     posts = tree.xpath("//div[@class='search-content']/ul/li")
-    print(tree)
 
     items_list = []
     for post in posts[:5]:

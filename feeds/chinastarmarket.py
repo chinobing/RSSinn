@@ -21,7 +21,7 @@ description=f"""
 - 来源：`https://www.chinastarmarket.cn/telegraph`
 - 参数：没有
 """
-@chinastarmarket.get("/telegraph/",
+@chinastarmarket.get("/telegraph",
               summary="科创板电报",
               description=description)
 @cached()

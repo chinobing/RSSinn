@@ -19,7 +19,7 @@ description=f"""
 - 来源：`https://www.bridgewater.com/research-and-insights/`
 - 参数：没有
 """
-@bridgewater.get("/research/",
+@bridgewater.get("/research",
               summary="桥水（Bridgewater)研究与观察",
               description=description)
 @cached()

@@ -20,7 +20,7 @@ description=f"""
 - 来源：`https://36kr.com/newsflashes/`
 - 参数：没有
 """
-@kr.get("/newsflashes/",
+@kr.get("/newsflashes",
               summary="36kr-实时快讯",
               description=description)
 @cached()
@@ -115,5 +115,4 @@ async def latest(filters=Depends(filter_keywords)):
     }
     feed = RSSFeed(**feed_data)
     return RSSResponse(feed)
-
 

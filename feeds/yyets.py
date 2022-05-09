@@ -21,7 +21,7 @@ top_description=f"""
 - 来源：`https://yyets.dmesg.app/search`
 - 参数：没有
 """
-@yyets.get("/top/",
+@yyets.get("/top",
               summary="YYeTs-全站热搜",
               description=top_description)
 @cached()
@@ -75,7 +75,7 @@ discuss_description=f"""
 - 参数：没有
 """
 
-@yyets.get("/discuss/",
+@yyets.get("/discuss",
               summary="YYeTs-评论区资源-阿里云盘",
               description=discuss_description)
 @cached()
