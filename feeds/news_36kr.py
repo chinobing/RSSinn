@@ -102,7 +102,7 @@ async def latest(filters=Depends(filter_keywords)):
         content = sub_re.xpath('//div[contains(@class,"articleDetailContent")]/node()').getall()
         description = "".join(content)
 
-        _item = Item(title=title, link=link, description=f"<![CDATA[ {description} ]]>", pub_date=pub_date)
+        _item = Item(title=title, link=link, description=description, pub_date=pub_date)
         _filter = filter_content(_item, filters)
         if _filter:
             items_list.append(_item)
