@@ -96,7 +96,7 @@ async def latest(filters=Depends(filter_keywords)):
     items_list = []
     for sub_re in sub_responses:
         title = sub_re.xpath('//h1[contains(@class,"article-title")]//text()').get()
-        link = sub_re.xpath('//meta[@name="og:url"]/@content').get()
+        link = sub_re.xpath('//link[@rel="canonical"]/@href').get()
         date = sub_re.xpath('//span[contains(@class,"item-time")]//text()').getall()[1]
         pub_date = datetime.strptime(date,'%Y-%m-%d %H:%M')
         content = sub_re.xpath('//div[contains(@class,"articleDetailContent")]/node()').getall()
