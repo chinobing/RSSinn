@@ -11,7 +11,7 @@ site_settings:
 # Upptime (https://upptime.js.org) is the open-source uptime monitor and status page, powered entirely by GitHub Actions, https://github.com/upptime/upptime
 upptime:
      enabled: True
-     jsdelivr_CDN: True
+     jsdelivr_CDN: False
      github: "chinobing"
      repo: "upptime-rssinn"
 
