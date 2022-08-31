@@ -62,7 +62,7 @@ async def newsflashes():
 """
 -------------------------------------------------
    Description :     36kr-实时快讯
-   Modified at ：     2022/04/24
+   Modified at ：     2022/07/19
 -------------------------------------------------
 """
 description_latest=f"""
@@ -71,42 +71,73 @@ description_latest=f"""
 - 来源：`https://36kr.com/information/web_news/`
 - 参数：没有
 """
+# @kr.get("/latest",
+#               summary="36kr-资讯",
+#               description=description_latest)
+# # @cached()
+# async def latest(filters=Depends(filter_keywords)):
+#     url = 'https://36kr.com/information/web_news/'
+#
+#     fake = Faker()
+#     FAKE_HEADERS = {'Host':'36kr.com', 'User-Agent':fake.user_agent()}
+#
+#     response = await fetch(url, headers=FAKE_HEADERS)
+#     data_text = response.re(r'<script>window.initialState=(.*?)</')[0]
+#     str_data = "".join(data_text)
+#     json_data = json.loads(str_data)
+#     itemList = json_data['information']['informationList']['itemList']
+#
+#     links = []
+#     for item in itemList:
+#         link = 'https://36kr.com/p/' + str(item['itemId'])
+#         links.append(link)
+#     print(links)
+#
+#     sub_responses = await fetch(links, headers=FAKE_HEADERS, cache_enabled=True)
+#     items_list = []
+#     for sub_re in sub_responses:
+#         title = sub_re.xpath('//h1[contains(@class,"article-title")]//text()').get()
+#         link = sub_re.xpath('//link[@rel="canonical"]/@href').get()
+#         date = sub_re.xpath('//span[contains(@class,"item-time")]//text()').getall()[1]
+#         pub_date = datetime.strptime(date,'%Y-%m-%d %H:%M')
+#         content = sub_re.xpath('//div[contains(@class,"articleDetailContent")]/node()').getall()
+#         description = "".join(content)
+#
+#         _item = Item(title=title, link=link, description=description)
+#         _filter = filter_content(_item, filters)
+#         if _filter:
+#             items_list.append(_item)
+#
+#     feed_data = {
+#         'title': '36kr-资讯',
+#         'link': url,
+#         'description': "",
+#         'item': items_list,
+#     }
+#     feed = RSSFeed(**feed_data)
+#     return RSSResponse(feed)
+#
 @kr.get("/latest",
               summary="36kr-资讯",
               description=description_latest)
-# @cached()
-async def latest(filters=Depends(filter_keywords)):
+@cached()
+async def latest():
     url = 'https://36kr.com/information/web_news/'
 
     fake = Faker()
     FAKE_HEADERS = {'Host':'36kr.com', 'User-Agent':fake.user_agent()}
 
     response = await fetch(url, headers=FAKE_HEADERS)
-    data_text = response.re(r'<script>window.initialState=(.*?)</')[0]
-    str_data = "".join(data_text)
-    json_data = json.loads(str_data)
-    itemList = json_data['information']['informationList']['itemList']
+    posts = response.xpath("//div[contains(@class,'article-item-info')]")
 
-    links = []
-    for item in itemList:
-        link = 'https://36kr.com/p/' + str(item['itemId'])
-        links.append(link)
-
-    sub_responses = await fetch(links, headers=FAKE_HEADERS, cache_enabled=True)
     items_list = []
-    for sub_re in sub_responses:
-        title = sub_re.xpath('//h1[contains(@class,"article-title")]//text()').get()
-        link = sub_re.xpath('//link[@rel="canonical"]/@href').get()
-        date = sub_re.xpath('//span[contains(@class,"item-time")]//text()').getall()[1]
-        pub_date = datetime.strptime(date,'%Y-%m-%d %H:%M')
-        content = sub_re.xpath('//div[contains(@class,"articleDetailContent")]/node()').getall()
-        description = "".join(content)
-
-        _item = Item(title=title, link=link, description=description, pub_date=pub_date)
-        _filter = filter_content(_item, filters)
-        if _filter:
-            items_list.append(_item)
-
+    for post in posts:
+        title = post.xpath(".//p[contains(@class,'title-wrapper')]//text()").get()
+        _link =  post.xpath(".//a[contains(@class,'article-item-title')]/@href").get()
+        link = f'https://36kr.com{_link}'
+        description = post.xpath(".//a[contains(@class,'article-item-description')]//text()").get()
+        _item = Item(title=title, link=link, description=description)
+        items_list.append(_item)
     feed_data = {
         'title': '36kr-资讯',
         'link': url,
